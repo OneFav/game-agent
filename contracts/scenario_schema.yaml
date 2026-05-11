@@ -1,0 +1,19 @@
+﻿schema_version: "1.0"
+type: object
+required:
+  - schema_version
+  - task_id
+  - task_family
+  - formalism
+  - agents
+  - observation_space
+  - action_space
+  - reward_structure
+  - evaluation_metrics
+  - termination_conditions
+  - splits
+properties:
+  task_family:
+    enum: [drone_ring_game]
+  formalism:
+    enum: [MDP, MarkovGame, POSG, Dec-POMDP]
