@@ -1,0 +1,21 @@
+{
+  "created_at": "2026-05-21T11:14:25+00:00",
+  "files": [
+    "algorithm_card.md",
+    "default_config.yaml",
+    "infer.py",
+    "metadata.json",
+    "policy.py",
+    "requirements.txt",
+    "search_space.yaml",
+    "tests/test_action_bounds.py",
+    "tests/test_inference_latency.py",
+    "tests/test_policy_interface.py",
+    "tests/test_smoke_rollout.py",
+    "train.py"
+  ],
+  "freeze_hash": "39a9d107bf9f18cbfba658ed9a928a12deea1bc129405950ab177f2c048f112b",
+  "package_id": "rule_ring_nav_v1",
+  "package_type": "policy",
+  "schema_version": "1.0"
+}

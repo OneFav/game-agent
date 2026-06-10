@@ -9,9 +9,9 @@ from game_agent.policy_designer import PolicyDesigner
 from game_agent.scenario_compiler import ScenarioCompiler
 
 
-SCENARIO_HOOK = [sys.executable, "hooks/post_scenario_compile.py"]
-POLICY_HOOK = [sys.executable, "hooks/post_policy_submit.py"]
-EXPERIMENT_HOOK = [sys.executable, "hooks/post_experiment_run.py"]
+SCENARIO_HOOK = [sys.executable, "src/hooks/post_scenario_compile.py"]
+POLICY_HOOK = [sys.executable, "src/hooks/post_policy_submit.py"]
+EXPERIMENT_HOOK = [sys.executable, "src/hooks/post_experiment_run.py"]
 
 
 def _run(command: list[str]) -> subprocess.CompletedProcess[str]:

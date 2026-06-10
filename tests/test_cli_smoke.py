@@ -11,7 +11,7 @@ TASK_TEXT = "红方无人机穿过两个圆环，蓝方追击拦截，通信延�
 def _pythonpath_env() -> dict[str, str]:
     env = os.environ.copy()
     current = env.get("PYTHONPATH")
-    env["PYTHONPATH"] = str(REPO_ROOT) if not current else f"{REPO_ROOT}{os.pathsep}{current}"
+    env["PYTHONPATH"] = str(REPO_ROOT / "src") if not current else f"{REPO_ROOT / 'src'}{os.pathsep}{current}"
     return env
 
 
@@ -202,7 +202,7 @@ def test_cli_hook_failure_stderr_includes_diagnostics(tmp_path: Path, monkeypatc
     import game_agent.cli as cli
 
     fake_repo_root = tmp_path / "fake_repo"
-    hooks_dir = fake_repo_root / "hooks"
+    hooks_dir = fake_repo_root / "src" / "hooks"
     hooks_dir.mkdir(parents=True)
     hook = hooks_dir / "post_scenario_compile.py"
     hook.write_text(

@@ -22,4 +22,10 @@ every default must be written to `assumptions.md`. If the source text omits a va
 
 ## Validation
 
-After generation, run `python hooks/post_scenario_compile.py --scenario scenarios/<task_id>`. The skill is complete only when the ScenarioPackage exists, assumptions are auditable, and validation passes.
+## Codex Subagent
+
+This skill is executed as the **scenario_compiler** Codex subagent defined in `.codex/agents/scenario_compiler.toml`. The subagent's `developer_instructions` contain the complete work boundary matrix (Allowed/Forbidden Edits), the Policy ABC calling convention, and all key constraints. All file-system operations are restricted to `scenarios/<task_id>/`.
+
+## Validation
+
+After generation, run `python src/hooks/post_scenario_compile.py --scenario scenarios/<task_id>`. The skill is complete only when the ScenarioPackage exists, assumptions are auditable, and validation passes.

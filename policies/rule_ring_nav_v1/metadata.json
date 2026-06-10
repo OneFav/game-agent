@@ -1,0 +1,9 @@
+{
+  "formalism": "POSG",
+  "policy_id": "rule_ring_nav_v1",
+  "policy_type": "rule_ring_navigation",
+  "scenario_dir": "C:/Users/admin/Desktop/game-agent/scenarios/drone_ring_001",
+  "schema_version": "1.0",
+  "task_family": "drone_ring_game",
+  "task_id": "drone_ring_001"
+}

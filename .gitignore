@@ -29,13 +29,12 @@ Thumbs.db
 .superpowers/
 
 # Local generated demos
-.tmp-*/
-.tmp*/
+.tmp-*
+.tmp*
 
-# Generated runtime packages; keep source generators and tests in git.
-scenarios/*
-!scenarios/.gitkeep
-policies/*
-!policies/.gitkeep
-experiments/*
-!experiments/.gitkeep
+# External reference repos (cloned for local development only)
+example-inner/
+
+# AI context files (generated locally by /init-project; not uploaded to avoid confusion)
+CLAUDE.md
+**/CLAUDE.md

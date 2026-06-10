@@ -20,4 +20,10 @@ Promotion must use `evaluation_metrics` from the scenario specification rather t
 
 ## Validation
 
-After generation, run `python hooks/post_experiment_run.py --exp experiments/<exp_id>`. The loop is complete only when multi-seed metrics, leaderboard, best config, report, and manifest are present and validation passes.
+## Codex Subagent
+
+This skill is executed as the **experiment_autoresearch** Codex subagent defined in `.codex/agents/experiment_autoresearch.toml`. The subagent's `developer_instructions` contain the complete work boundary matrix (Allowed/Forbidden Edits), the anti-reward-hacking rules (4 gates), the promotion gate pipeline, and the deterministic sweep protocol. Strict ranking by `evaluation_metrics` (not reward components) + multi-seed verification + promotion gate are enforced.
+
+## Validation
+
+After generation, run `python src/hooks/post_experiment_run.py --exp experiments/<exp_id>`. The loop is complete only when multi-seed metrics, leaderboard, best config, report, and manifest are present and validation passes.

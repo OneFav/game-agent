@@ -1,0 +1,49 @@
+{
+  "success_rate": 0.0,
+  "collision_rate": 1.0,
+  "out_of_bounds_rate": 0.0,
+  "action_violation_rate": 0.0,
+  "avg_episode_length": 12.0,
+  "primary_metric": {
+    "name": "success_rate",
+    "value": 0.0,
+    "std": 0.0,
+    "n": 3
+  },
+  "per_seed_metrics": [
+    {
+      "seed": 100,
+      "success": false,
+      "collision": true,
+      "out_of_bounds": false,
+      "success_rate": 0.0,
+      "collision_rate": 1.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 12,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 101,
+      "success": false,
+      "collision": true,
+      "out_of_bounds": false,
+      "success_rate": 0.0,
+      "collision_rate": 1.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 12,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 102,
+      "success": false,
+      "collision": true,
+      "out_of_bounds": false,
+      "success_rate": 0.0,
+      "collision_rate": 1.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 12,
+      "action_violation_rate": 0.0
+    }
+  ],
+  "feasible": false
+}

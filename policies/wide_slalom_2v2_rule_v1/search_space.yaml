@@ -1,0 +1,57 @@
+parameters:
+  racer_gain:
+    type: number
+    min: 0.75
+    max: 1.0
+    default: 0.92
+    priority: priority_1
+  intercept_gain:
+    type: number
+    min: 0.75
+    max: 1.0
+    default: 0.95
+    priority: priority_1
+  escort_gain:
+    type: number
+    min: 0.55
+    max: 0.9
+    default: 0.72
+    priority: priority_2
+  block_gain:
+    type: number
+    min: 0.4
+    max: 0.8
+    default: 0.62
+    priority: priority_2
+  avoidance_radius:
+    type: number
+    min: 1.5
+    max: 4.0
+    default: 2.5
+    priority: priority_2
+  avoidance_gain:
+    type: number
+    min: 0.2
+    max: 0.8
+    default: 0.45
+    priority: priority_2
+  velocity_damping:
+    type: number
+    min: 0.0
+    max: 0.25
+    default: 0.10
+    priority: priority_2
+  prediction_horizon:
+    type: number
+    min: 0.0
+    max: 0.8
+    default: 0.35
+    priority: priority_2
+  reserved_action_value:
+    type: number
+    values: [0.0]
+    default: 0.0
+    priority: do_not_tune
+budget:
+  max_trials: 24
+  seeds_per_trial: 3

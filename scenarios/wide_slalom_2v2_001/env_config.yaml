@@ -1,0 +1,47 @@
+task_id: wide_slalom_2v2_001
+task_family: drone_ring_game
+engine: m1_contract_drone_ring_compatible
+formalism: POSG
+max_steps: 600
+dt: 0.1
+communication:
+  mode: perfect
+teams:
+  red:
+    count: 2
+    roles:
+      - id: red_racer_0
+        role: racer
+      - id: red_defender_0
+        role: defender
+        behavior_mode: escort
+  blue:
+    count: 2
+    roles:
+      - id: blue_racer_0
+        role: racer
+      - id: blue_defender_0
+        role: defender
+        behavior_mode: intercept
+gate_layout: wide_slalom
+gate_count: 6
+gates:
+  - [-15.0, -6.0]
+  - [-9.0, 5.0]
+  - [-3.0, -5.0]
+  - [3.0, 5.0]
+  - [9.0, -5.0]
+  - [15.0, 6.0]
+field:
+  boundary: 25.0
+ring_radius: 1.5
+collision_radius: 0.5
+interception_radius: 0.8
+max_speed: 8.0
+action_low: [-1.0, -1.0, -1.0, -1.0]
+action_high: [1.0, 1.0, 1.0, 1.0]
+initial_positions:
+  red_racer_0: [-21.0, -2.0]
+  red_defender_0: [-22.0, -4.0]
+  blue_racer_0: [21.0, 2.0]
+  blue_defender_0: [20.0, 4.0]

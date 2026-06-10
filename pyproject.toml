@@ -12,6 +12,13 @@ dependencies = ["numpy>=1.24", "PyYAML>=6.0"]
 [project.optional-dependencies]
 dev = ["pytest>=7.4"]
 
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["game_agent*", "contracts*"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["."]
+pythonpath = ["src"]

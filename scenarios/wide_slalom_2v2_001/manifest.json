@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "package_id": "wide_slalom_2v2_001",
+  "package_type": "scenario",
+  "created_at": "2026-06-10T10:53:02+0800",
+  "files": {
+    "assumptions.md": "sha256:a015073ae538705455fd0c834d1bb6edd94732464b71ae753f4615cd321ab2d6",
+    "env.py": "sha256:44ccb3986c1047fc267aa607e1fc327ba59e139959a326758fe0acb46b7f9e22",
+    "env_config.yaml": "sha256:b9f3d34f8d506bbfcf9d02146af1f7f573fe25036b7300bd57250029feddbbed",
+    "model.md": "sha256:e584d7ef0101fe39a7e84cea0dad0e807a9921da0fb703be86a905fd6cfeea3d",
+    "task_spec.yaml": "sha256:abd2e70289a71221991c830d5c28410febfefafb3d87625e77283ca78accdad0",
+    "tests/test_obs_action_shape.py": "sha256:c384d72b60ea75d07276d5d8bc5eb141c2729a97a4cedd6dbf8e5ad87477c671",
+    "tests/test_reset_deterministic.py": "sha256:4ac1646717dfdebc08c6e7f3fdcf78910ffda47a7aac840e2cc5984f59354a1d"
+  },
+  "freeze_hash": "sha256:9d80edf247600a9ae9183a9a42e0c888a0eab68ffcf50b152a804c4de6289c7b",
+  "validation": {
+    "schema_check": "passed",
+    "contract_tests": {
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    "smoke_test": "passed"
+  },
+  "downstream_consumers": [
+    "policies/*",
+    "experiments/*"
+  ]
+}

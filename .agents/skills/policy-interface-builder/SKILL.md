@@ -22,4 +22,10 @@ Read action bounds from the scenario contract and keep the policy output compati
 
 ## Validation
 
-After generation, run `python hooks/post_policy_submit.py --policy policies/<policy_id>`. The package is complete only when train/infer entrypoints exist, action clipping is documented and tested, and validation passes.
+## Codex Subagent
+
+This skill is executed as the **policy_designer** Codex subagent defined in `.codex/agents/policy_designer.toml`. The subagent's `developer_instructions` contain the complete work boundary matrix (Allowed/Forbidden Edits), the Policy ABC calling convention, and all key constraints including the safety gate pipeline. The input scenario package must be frozen (with `freeze_hash` in `manifest.json`) and is read-only.
+
+## Validation
+
+After generation, run `python src/hooks/post_policy_submit.py --policy policies/<policy_id>`. The package is complete only when train/infer entrypoints exist, action clipping is documented and tested, and validation passes.

@@ -1,0 +1,20 @@
+{
+  "policy_id": "wide_slalom_2v2_rule_v1",
+  "algorithm_family": "rule_based",
+  "seed": 100,
+  "max_steps": 600,
+  "wall_time_limit": 7200,
+  "resume_from": null,
+  "log_interval": 100,
+  "config": {
+    "racer_gain": 0.75,
+    "escort_gain": 0.72,
+    "intercept_gain": 0.75,
+    "block_gain": 0.62,
+    "avoidance_radius": 2.5,
+    "avoidance_gain": 0.45,
+    "velocity_damping": 0.1,
+    "prediction_horizon": 0.35,
+    "reserved_action_value": 0.0
+  }
+}

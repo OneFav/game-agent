@@ -1,0 +1,227 @@
+{
+  "created_at": "2026-06-09T21:18:38+08:00",
+  "scan_summary": {
+    "estimated_total_files": 58,
+    "scanned_files": 40,
+    "coverage_percent": 69,
+    "ignored_files": 0,
+    "truncated": false,
+    "truncated_reason": null
+  },
+  "modules": [
+    {
+      "path": "game_agent",
+      "language": "Python",
+      "entry_file": "game_agent/__main__.py",
+      "tests_dir": "tests/",
+      "config_file": "pyproject.toml",
+      "module_claude_md": "game_agent/CLAUDE.md",
+      "coverage": {
+        "scanned": 3,
+        "total": 3,
+        "percent": 100,
+        "gaps": []
+      }
+    },
+    {
+      "path": "game_agent/scenario_compiler",
+      "language": "Python",
+      "entry_file": "game_agent/scenario_compiler/compiler.py",
+      "tests_dir": "tests/test_scenario_compiler.py",
+      "config_file": null,
+      "module_claude_md": "game_agent/scenario_compiler/CLAUDE.md",
+      "coverage": {
+        "scanned": 3,
+        "total": 3,
+        "percent": 100,
+        "gaps": []
+      }
+    },
+    {
+      "path": "game_agent/policy_designer",
+      "language": "Python",
+      "entry_file": "game_agent/policy_designer/designer.py",
+      "tests_dir": "tests/test_policy_designer.py",
+      "config_file": null,
+      "module_claude_md": "game_agent/policy_designer/CLAUDE.md",
+      "coverage": {
+        "scanned": 3,
+        "total": 3,
+        "percent": 100,
+        "gaps": []
+      }
+    },
+    {
+      "path": "game_agent/autoresearch",
+      "language": "Python",
+      "entry_file": "game_agent/autoresearch/runner.py",
+      "tests_dir": "tests/test_autoresearch.py",
+      "config_file": null,
+      "module_claude_md": "game_agent/autoresearch/CLAUDE.md",
+      "coverage": {
+        "scanned": 3,
+        "total": 3,
+        "percent": 100,
+        "gaps": []
+      }
+    },
+    {
+      "path": "game_agent/envs/drone_ring_game",
+      "language": "Python",
+      "entry_file": "game_agent/envs/drone_ring_game/env.py",
+      "tests_dir": "tests/test_drone_ring_env.py",
+      "config_file": null,
+      "module_claude_md": "game_agent/envs/drone_ring_game/CLAUDE.md",
+      "coverage": {
+        "scanned": 2,
+        "total": 2,
+        "percent": 100,
+        "gaps": []
+      }
+    },
+    {
+      "path": "game_agent/utils",
+      "language": "Python",
+      "entry_file": null,
+      "tests_dir": "tests/test_utils.py",
+      "config_file": null,
+      "module_claude_md": "game_agent/utils/CLAUDE.md",
+      "coverage": {
+        "scanned": 4,
+        "total": 4,
+        "percent": 100,
+        "gaps": []
+      }
+    },
+    {
+      "path": "agents",
+      "language": "Python + Markdown",
+      "entry_file": "agents/scenario_compiler/orchestrator.py",
+      "tests_dir": "tests/test_agent_project_content.py",
+      "config_file": null,
+      "module_claude_md": "agents/CLAUDE.md",
+      "coverage": {
+        "scanned": 9,
+        "total": 9,
+        "percent": 100,
+        "gaps": ["agents/*/prompt.md 文件仅引用未逐字读取"]
+      }
+    },
+    {
+      "path": "contracts",
+      "language": "Python + YAML",
+      "entry_file": "contracts/policy_protocol.py",
+      "tests_dir": "tests/test_contracts.py",
+      "config_file": null,
+      "module_claude_md": "contracts/CLAUDE.md",
+      "coverage": {
+        "scanned": 2,
+        "total": 2,
+        "percent": 100,
+        "gaps": []
+      }
+    },
+    {
+      "path": "hooks",
+      "language": "Python",
+      "entry_file": "hooks/post_scenario_compile.py",
+      "tests_dir": "tests/test_hooks.py",
+      "config_file": null,
+      "module_claude_md": "hooks/CLAUDE.md",
+      "coverage": {
+        "scanned": 3,
+        "total": 3,
+        "percent": 100,
+        "gaps": []
+      }
+    },
+    {
+      "path": "tests",
+      "language": "Python",
+      "entry_file": null,
+      "tests_dir": "tests/",
+      "config_file": null,
+      "module_claude_md": null,
+      "coverage": {
+        "scanned": 2,
+        "total": 9,
+        "percent": 22,
+        "gaps": [
+          "tests/test_utils.py",
+          "tests/test_contracts.py",
+          "tests/test_drone_ring_env.py",
+          "tests/test_scenario_compiler.py",
+          "tests/test_policy_designer.py",
+          "tests/test_autoresearch.py",
+          "tests/test_hooks.py"
+        ]
+      }
+    },
+    {
+      "path": "docs/superpowers",
+      "language": "Markdown",
+      "entry_file": null,
+      "tests_dir": null,
+      "config_file": null,
+      "module_claude_md": null,
+      "coverage": {
+        "scanned": 0,
+        "total": 2,
+        "percent": 0,
+        "gaps": [
+          "docs/superpowers/specs/2026-05-11-game-agent-m1-design.md",
+          "docs/superpowers/plans/2026-05-11-game-agent-m1-implementation.md"
+        ]
+      }
+    }
+  ],
+  "important_paths": {
+    "entry_points": [
+      "game_agent/__main__.py",
+      "game_agent/cli.py"
+    ],
+    "interfaces": [
+      "contracts/policy_protocol.py",
+      "contracts/scenario_schema.yaml",
+      "INTERFACE_1_SCENARIO_TO_POLICY.md",
+      "INTERFACE_2_POLICY_TO_AUTORESEARCH.md"
+    ],
+    "schemas": [
+      "contracts/scenario_schema.yaml"
+    ],
+    "tests": [
+      "tests/"
+    ],
+    "configs": [
+      "pyproject.toml",
+      ".gitignore"
+    ],
+    "generated_artifacts": [
+      "scenarios/drone_ring_001/",
+      "scenarios/review_runtime_check/",
+      "policies/rule_ring_nav_v1/",
+      "experiments/exp_drone_ring_001/"
+    ]
+  },
+  "gaps_summary": {
+    "unread_test_files": [
+      "tests/test_utils.py",
+      "tests/test_contracts.py",
+      "tests/test_drone_ring_env.py",
+      "tests/test_scenario_compiler.py",
+      "tests/test_policy_designer.py",
+      "tests/test_autoresearch.py",
+      "tests/test_hooks.py"
+    ],
+    "unread_docs": [
+      "docs/superpowers/specs/2026-05-11-game-agent-m1-design.md",
+      "docs/superpowers/plans/2026-05-11-game-agent-m1-implementation.md"
+    ],
+    "skipped_summary": "测试文件（7个）和设计文档（2个）未逐行读取。测试文件可通过 pytest 结果（52 passed）间接验证；设计文档属于历史规划记录。不存在阻碍架构理解的关键缺口。"
+  },
+  "next_recommended_actions": [
+    "如需补充测试策略详情，可阅读 tests/ 下的 7 个测试文件",
+    "如需了解 M1 设计决策历史，可阅读 docs/superpowers/specs/ 和 plans/ 下的 design/implementation 文档",
+    "如需补充 Agent 系统提示词信息，可阅读 agents/*/prompt.md"
+  ]
+}

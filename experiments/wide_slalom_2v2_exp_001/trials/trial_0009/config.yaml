@@ -1,0 +1,9 @@
+racer_gain: 1.0
+escort_gain: 0.72
+intercept_gain: 1.0
+block_gain: 0.62
+avoidance_radius: 2.5
+avoidance_gain: 0.45
+velocity_damping: 0.1
+prediction_horizon: 0.35
+reserved_action_value: 0.0

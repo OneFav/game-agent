@@ -1,0 +1,5 @@
+ring_count: 2
+max_steps: 200
+ring_radius: 0.45
+collision_radius: 0.25
+boundary: 10.0

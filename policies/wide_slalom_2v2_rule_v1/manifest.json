@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "package_id": "wide_slalom_2v2_rule_v1",
+  "package_type": "policy",
+  "created_at": "2026-06-10T10:56:30+0800",
+  "scenario": {
+    "scenario_id": "wide_slalom_2v2_001",
+    "freeze_hash": "sha256:9d80edf247600a9ae9183a9a42e0c888a0eab68ffcf50b152a804c4de6289c7b"
+  },
+  "policy_class": "PolicyClass",
+  "files": {
+    "algorithm_card.md": "sha256:08d7ea2d23823b7deeb86f0bf968676aa4efe114b8fb4b237e4a5adc3a7e39ff",
+    "default_config.yaml": "sha256:724906f387962bdbaf10ad81373115238e4004fb7b91896e4836495a0e3cedf0",
+    "infer.py": "sha256:611feaed5f7e05d39a2a69527900308c47338089bad2f38c19015a04fe559db7",
+    "metadata.json": "sha256:0c0bd13c8952a21fdc80f0115e999eaf8dda268a0ddc1ea52218e3a356961bc6",
+    "policy.py": "sha256:2adde2f397b76204f2147601a8e74d03200b6dabe6adc4c660d83a068a0c105a",
+    "requirements.txt": "sha256:329ac74cdf8febf48a3d3b7638abb261ad704f01ff94abd5ac5d3d463a092a12",
+    "search_space.yaml": "sha256:b4c2489a3b672b31cef0afc446e4970d3a1d8cb713789a15036cf04b130d1087",
+    "tests/test_action_bounds.py": "sha256:234a49636e672d5baf3aab66da897b8dd32e70c009cf896e7c8fbe17e80a9b78",
+    "tests/test_deterministic.py": "sha256:70a8058fc106c581fea72b2760ebf3f853d395409b83ef23c2878dae8a5562d1",
+    "tests/test_no_side_effects.py": "sha256:f8374a1f57c929d26c120fa2b853e50de6ba1e183b867206bed0299974f21735",
+    "tests/test_policy_class.py": "sha256:717717755bfcbe815bf83f729a5e67caaaf28de3c20b3f22c7aadec829098201",
+    "train.py": "sha256:7c1507ec6aa4cffdab7609ab26c1dae6320620a33aefba05e6a37faa791201c1"
+  },
+  "freeze_hash": "sha256:b4fc694df6213eac6856641b7d9685cb7b506e54a55707b34c97f2fe05c7d3ba",
+  "validation": {
+    "interface_check": "passed",
+    "contract_tests": {
+      "passed": 5,
+      "failed": 0
+    },
+    "smoke_test": "passed"
+  },
+  "training_estimate": {
+    "required": false,
+    "expected_wall_time_seconds": 1,
+    "expected_cpu_cores": 1,
+    "expected_memory_mb": 128,
+    "notes": "Rule policy; train.py only materializes a checkpoint payload."
+  }
+}

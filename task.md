@@ -1,4 +1,4 @@
-﻿# Remaining Tasks
+# Remaining Tasks
 
 ## Environment
 - 扩展 `drone_ring_game` 的动力学、碰撞与边界验证覆盖。

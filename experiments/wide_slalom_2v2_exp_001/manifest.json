@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "package_id": "wide_slalom_2v2_exp_001",
+  "package_type": "experiment",
+  "created_at": "2026-06-10T10:54:08+0800",
+  "scenario": {
+    "path": "scenarios/wide_slalom_2v2_001",
+    "freeze_hash": "sha256:9d80edf247600a9ae9183a9a42e0c888a0eab68ffcf50b152a804c4de6289c7b"
+  },
+  "policy": {
+    "path": "policies/wide_slalom_2v2_rule_v1",
+    "freeze_hash": "sha256:b4fc694df6213eac6856641b7d9685cb7b506e54a55707b34c97f2fe05c7d3ba",
+    "declared_scenario_freeze_hash": "sha256:9d80edf247600a9ae9183a9a42e0c888a0eab68ffcf50b152a804c4de6289c7b"
+  },
+  "freeze_hash": "sha256:b68b966ce10b16648518c12d15aff7a5e0f879847b59f94f5f47696c5e10fc97",
+  "trials": 9,
+  "best_trial": "trial_0007",
+  "ranking_source": "task_spec.evaluation_metrics",
+  "search_budget": {
+    "max_trials": 24,
+    "executed_trials": 9,
+    "seeds_per_trial": 3,
+    "budget_wall_time_seconds": 7200
+  }
+}

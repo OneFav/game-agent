@@ -1,0 +1,16 @@
+{
+  "created_at": "2026-05-21T11:14:25+00:00",
+  "files": [
+    "assumptions.md",
+    "env.py",
+    "env_config.yaml",
+    "model.md",
+    "task_spec.yaml",
+    "tests/test_obs_action_shape.py",
+    "tests/test_reset_deterministic.py"
+  ],
+  "freeze_hash": "f531c82922afc4a56a0e55e31ba66e204f9d53cd6e4e4c7423c382263e0bf76f",
+  "package_id": "drone_ring_001",
+  "package_type": "scenario",
+  "schema_version": "1.0"
+}

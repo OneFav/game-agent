@@ -1,0 +1,81 @@
+{
+  "metrics": {
+    "primary": {
+      "name": "success_rate",
+      "value": 0.0,
+      "std": 0.0,
+      "n": 3
+    },
+    "secondary": {
+      "avg_episode_length": {
+        "value": 68.0
+      }
+    },
+    "hard_constraints": {
+      "collision_rate": {
+        "value": 1.0,
+        "max": 0.05,
+        "passed": false
+      },
+      "out_of_bounds_rate": {
+        "value": 0.0,
+        "max": 0.01,
+        "passed": true
+      },
+      "action_violation_rate": {
+        "value": 0.0,
+        "max": 0.0,
+        "passed": true
+      }
+    }
+  },
+  "per_seed_metrics": [
+    {
+      "seed": 100,
+      "success": false,
+      "collision": true,
+      "out_of_bounds": false,
+      "success_rate": 0.0,
+      "collision_rate": 1.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 68,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 101,
+      "success": false,
+      "collision": true,
+      "out_of_bounds": false,
+      "success_rate": 0.0,
+      "collision_rate": 1.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 68,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 102,
+      "success": false,
+      "collision": true,
+      "out_of_bounds": false,
+      "success_rate": 0.0,
+      "collision_rate": 1.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 68,
+      "action_violation_rate": 0.0
+    }
+  ],
+  "failure_episodes": [
+    {
+      "seed": 100,
+      "failure_type": "collision"
+    },
+    {
+      "seed": 101,
+      "failure_type": "collision"
+    },
+    {
+      "seed": 102,
+      "failure_type": "collision"
+    }
+  ]
+}

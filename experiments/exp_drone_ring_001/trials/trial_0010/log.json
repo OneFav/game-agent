@@ -1,0 +1,11 @@
+{
+  "policy_id": "rule_ring_nav_v1",
+  "scenario_id": "drone_ring_001",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "trial_id": "trial_0010",
+  "wall_time_seconds": 0.006988699999055825
+}
