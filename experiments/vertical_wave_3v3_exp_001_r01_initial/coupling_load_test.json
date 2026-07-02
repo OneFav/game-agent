@@ -1,0 +1,28 @@
+{
+  "delta": 2.333333333333333,
+  "empty_field_score": 8.0,
+  "passed": true,
+  "per_seed": [
+    {
+      "blue_score": 0.0,
+      "red_score": 6.0,
+      "seed": 11,
+      "side_score": 6.0
+    },
+    {
+      "blue_score": 0.0,
+      "red_score": 6.0,
+      "seed": 17,
+      "side_score": 6.0
+    },
+    {
+      "blue_score": 0.0,
+      "red_score": 12.0,
+      "seed": 23,
+      "side_score": 12.0
+    }
+  ],
+  "target_side": "initial",
+  "true_opponent_score": 5.666666666666667,
+  "utility_side": "red"
+}

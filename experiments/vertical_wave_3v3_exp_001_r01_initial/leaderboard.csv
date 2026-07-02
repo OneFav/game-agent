@@ -1,0 +1,2 @@
+rank,trial_id,feasible,target_side,red_score,blue_score,advantage_score,collision_rate,out_of_bounds_rate,action_violation_rate,avg_episode_length,best_response_gain_side,decision
+1,trial_0001,true,initial,5.666667,4.000000,1.666667,0.000000,0.000000,0.000000,600.000000,,promote

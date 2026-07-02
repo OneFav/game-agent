@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "package_type": "policy",
+  "package_id": "vertical_wave_3v3_rule_v1_r02_blue",
+  "created_at": "2026-07-01T14:19:06+00:00",
+  "files": [
+    "algorithm_card.md",
+    "default_config.yaml",
+    "infer.py",
+    "metadata.json",
+    "policy.py",
+    "requirements.txt",
+    "search_space.yaml",
+    "tests/test_action_bounds.py",
+    "tests/test_deterministic.py",
+    "tests/test_no_side_effects.py",
+    "tests/test_policy_class.py",
+    "train.py"
+  ],
+  "freeze_hash": "8387c2b35b802871deb43ee7a7007c266c697e01a3b2d91640e2623f42e721f0",
+  "training_estimate": {
+    "supports_training": false,
+    "method": "rule_based_noop_checkpoint",
+    "expected_wall_time_seconds": 1,
+    "expected_cpu": "1 core",
+    "expected_memory_mb": 256,
+    "gpu_required": false
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "test_name": "red_coupling_load_empty_blue",
+  "target_side": "red",
+  "utility_side": "red",
+  "utility_source": "avg_red_score / avg_blue_score from evaluator score outputs",
+  "empty_condition": "Blue policy is replaced by zero actions while red policy, config, scenario wrapper, and seeds are unchanged.",
+  "seeds": [
+    11,
+    17,
+    23
+  ],
+  "best_trial_id": "trial_0021",
+  "empty_field_score": 11.666666666666666,
+  "true_opponent_score": 8.666666666666666,
+  "delta": 3.0,
+  "passed": true,
+  "per_seed": [
+    {
+      "seed": 11,
+      "condition": "empty_blue_zero_actions",
+      "red_score": 12.0,
+      "blue_score": 0.0,
+      "side_score": 12.0,
+      "action_violation_rate": 0.0,
+      "episode_length": 543
+    },
+    {
+      "seed": 17,
+      "condition": "empty_blue_zero_actions",
+      "red_score": 11.0,
+      "blue_score": 0.0,
+      "side_score": 11.0,
+      "action_violation_rate": 0.0,
+      "episode_length": 556
+    },
+    {
+      "seed": 23,
+      "condition": "empty_blue_zero_actions",
+      "red_score": 12.0,
+      "blue_score": 0.0,
+      "side_score": 12.0,
+      "action_violation_rate": 0.0,
+      "episode_length": 600
+    }
+  ]
+}

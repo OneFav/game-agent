@@ -1,0 +1,124 @@
+{
+  "trial_count": 12,
+  "baseline_blue_utility": 8.0,
+  "best_trial": "trial_0007",
+  "best_metrics": {
+    "target_side": "blue",
+    "red_score": 5.0,
+    "blue_score": 8.333333333333334,
+    "target_side_score": 8.333333333333334,
+    "blue_utility_minus_red_utility": 3.333333333333334,
+    "advantage_score": 3.333333333333334,
+    "collision_rate": 0.0,
+    "out_of_bounds_rate": 0.0,
+    "action_violation_rate": 0.0,
+    "avg_episode_length": 600.0,
+    "primary_std": 1.247219128924647,
+    "hard_constraints_passed": true,
+    "promotion_gate_passed": true,
+    "target_gate_passed": true,
+    "decision": "promotion",
+    "best_response_gain_side": 0.3333333333333339,
+    "failure_episodes": [],
+    "per_seed_metrics": [
+      {
+        "seed": 11,
+        "red_score": 4.0,
+        "blue_score": 9.0,
+        "team_score": 4.0,
+        "blue_team_score": 9.0,
+        "advantage_score": 5.0,
+        "score_margin": -5.0,
+        "collision": false,
+        "out_of_bounds": false,
+        "collision_rate": 0.0,
+        "out_of_bounds_rate": 0.0,
+        "episode_length": 600,
+        "action_violation_rate": 0.0
+      },
+      {
+        "seed": 17,
+        "red_score": 6.0,
+        "blue_score": 9.0,
+        "team_score": 6.0,
+        "blue_team_score": 9.0,
+        "advantage_score": 3.0,
+        "score_margin": -3.0,
+        "collision": false,
+        "out_of_bounds": false,
+        "collision_rate": 0.0,
+        "out_of_bounds_rate": 0.0,
+        "episode_length": 600,
+        "action_violation_rate": 0.0
+      },
+      {
+        "seed": 23,
+        "red_score": 5.0,
+        "blue_score": 7.0,
+        "team_score": 5.0,
+        "blue_team_score": 7.0,
+        "advantage_score": 2.0,
+        "score_margin": -2.0,
+        "collision": false,
+        "out_of_bounds": false,
+        "collision_rate": 0.0,
+        "out_of_bounds_rate": 0.0,
+        "episode_length": 600,
+        "action_violation_rate": 0.0
+      }
+    ],
+    "coupling_load_delta": 5.666666666666666,
+    "coupling_load_passed": true
+  },
+  "coupling_load_test": {
+    "target_side": "blue",
+    "utility_side": "blue",
+    "utility_source": "avg_blue_score / avg_red_score from evaluator score outputs",
+    "seeds": [
+      11,
+      17,
+      23
+    ],
+    "true_opponent_score": 8.333333333333334,
+    "empty_field_score": 14.0,
+    "delta": 5.666666666666666,
+    "passed": true,
+    "per_seed": [
+      {
+        "seed": 11,
+        "red_score": 0.0,
+        "blue_score": 13.0,
+        "side_score": 13.0,
+        "collision": false,
+        "out_of_bounds": false,
+        "episode_length": 600,
+        "action_violation_rate": 0.0
+      },
+      {
+        "seed": 17,
+        "red_score": 0.0,
+        "blue_score": 14.0,
+        "side_score": 14.0,
+        "collision": false,
+        "out_of_bounds": false,
+        "episode_length": 600,
+        "action_violation_rate": 0.0
+      },
+      {
+        "seed": 23,
+        "red_score": 0.0,
+        "blue_score": 15.0,
+        "side_score": 15.0,
+        "collision": false,
+        "out_of_bounds": false,
+        "episode_length": 600,
+        "action_violation_rate": 0.0
+      }
+    ]
+  },
+  "scenario_freeze_hash": "167a012bf089fcd4757e83021def74a65d9f66bffedb199846d116ceaa6cdb0d",
+  "policy_freeze_hash": "36dd88a5d83b7eaa766ce0b5aae5cf73182b3020e9416a18f4eff79d458ec8d3",
+  "code_iterations": 4,
+  "target_side": "blue",
+  "status": "PASS"
+}

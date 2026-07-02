@@ -1,0 +1,19 @@
+{
+  "formalism": "POSG",
+  "optimization_target": {
+    "definition": "red_utility - blue_utility",
+    "mode": "initial",
+    "primary": "advantage_score",
+    "threshold": 0.0,
+    "utility_definition": {
+      "blue_utility": "avg_blue_score",
+      "red_utility": "avg_red_score"
+    }
+  },
+  "policy_id": "vertical_wave_3v3_rule_v1_r01_initial",
+  "policy_type": "rule_based_safe_swarm",
+  "scenario_dir": "scenarios/vertical_wave_3v3_001",
+  "schema_version": "1.0",
+  "task_family": "drone_ring_game",
+  "task_id": "vertical_wave_3v3_001"
+}

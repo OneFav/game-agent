@@ -1,0 +1,20 @@
+{
+  "trial_id": "trial_0012",
+  "target_side": "blue",
+  "hypothesis": "Escort lower gain at speed 7.0 tests a conservative fast-racer alternative for tie-breaking.",
+  "modified": "config",
+  "frozen_opponent": "red",
+  "seeds": [
+    11,
+    17,
+    23
+  ],
+  "utility_source": "avg_blue_score / avg_red_score from evaluator score outputs",
+  "wall_time_seconds": 22.832135,
+  "gate_checks": {
+    "hard_constraints_passed": false,
+    "blue_minus_red_positive": false,
+    "all_seed_positive": false
+  },
+  "failure_reason": "hard_constraints"
+}

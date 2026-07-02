@@ -1,0 +1,73 @@
+{
+  "target_side": "blue",
+  "red_score": 6.0,
+  "blue_score": 7.333333333333333,
+  "blue_utility_minus_red_utility": 1.333333333333333,
+  "advantage_score": 1.333333333333333,
+  "score_margin_red_minus_blue": -1.333333333333333,
+  "target_side_score": 7.333333333333333,
+  "collision_rate": 0.3333333333333333,
+  "out_of_bounds_rate": 0.0,
+  "action_violation_rate": 0.0,
+  "avg_episode_length": 597.6666666666666,
+  "hard_constraints_passed": false,
+  "primary_std": 3.7712361663282534,
+  "best_response_gain_side": 3.333333333333333,
+  "per_seed_metrics": [
+    {
+      "seed": 11,
+      "red_score": 7.0,
+      "blue_score": 10.0,
+      "team_score": 7.0,
+      "blue_team_score": 10.0,
+      "advantage_score": 3.0,
+      "score_margin": -3.0,
+      "collision": true,
+      "out_of_bounds": false,
+      "collision_rate": 1.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 593,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 17,
+      "red_score": 6.0,
+      "blue_score": 10.0,
+      "team_score": 6.0,
+      "blue_team_score": 10.0,
+      "advantage_score": 4.0,
+      "score_margin": -4.0,
+      "collision": false,
+      "out_of_bounds": false,
+      "collision_rate": 0.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 600,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 23,
+      "red_score": 5.0,
+      "blue_score": 2.0,
+      "team_score": 5.0,
+      "blue_team_score": 2.0,
+      "advantage_score": -3.0,
+      "score_margin": 3.0,
+      "collision": false,
+      "out_of_bounds": false,
+      "collision_rate": 0.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 600,
+      "action_violation_rate": 0.0
+    }
+  ],
+  "failure_episodes": [
+    {
+      "seed": 11,
+      "failure_type": "collision"
+    }
+  ],
+  "decision": "rollback",
+  "coupling_load_delta": null,
+  "coupling_load_passed": null,
+  "promotion_gate_passed": false
+}

@@ -1,0 +1,86 @@
+{
+  "metrics": {
+    "primary": {
+      "name": "team_score",
+      "value": 5.666666666666667,
+      "std": 2.0548046676563256,
+      "n": 3
+    },
+    "secondary": {
+      "score_margin": {
+        "value": -1.0
+      },
+      "blue_team_score": {
+        "value": 6.666666666666667
+      },
+      "avg_episode_length": {
+        "value": 613.3333333333334
+      }
+    },
+    "hard_constraints": {
+      "collision_rate": {
+        "value": 0.6666666666666666,
+        "max": 0.1,
+        "passed": false
+      },
+      "out_of_bounds_rate": {
+        "value": 0.0,
+        "max": 0.05,
+        "passed": true
+      },
+      "action_violation_rate": {
+        "value": 0.0,
+        "max": 0.0,
+        "passed": true
+      }
+    }
+  },
+  "per_seed_metrics": [
+    {
+      "seed": 11,
+      "team_score": 8.0,
+      "blue_team_score": 8.0,
+      "score_margin": 0.0,
+      "collision": true,
+      "out_of_bounds": false,
+      "collision_rate": 1.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 511,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 17,
+      "team_score": 6.0,
+      "blue_team_score": 5.0,
+      "score_margin": 1.0,
+      "collision": true,
+      "out_of_bounds": false,
+      "collision_rate": 1.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 529,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 23,
+      "team_score": 3.0,
+      "blue_team_score": 7.0,
+      "score_margin": -4.0,
+      "collision": false,
+      "out_of_bounds": false,
+      "collision_rate": 0.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 800,
+      "action_violation_rate": 0.0
+    }
+  ],
+  "failure_episodes": [
+    {
+      "seed": 11,
+      "failure_type": "collision"
+    },
+    {
+      "seed": 17,
+      "failure_type": "collision"
+    }
+  ]
+}
