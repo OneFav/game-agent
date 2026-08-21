@@ -1,0 +1,41 @@
+{
+  "primary_metric": {
+    "name": "team_score",
+    "value": 5.666666666666667,
+    "std": 1.247219128924647,
+    "n": 3
+  },
+  "secondary_metrics": {
+    "score_margin": {
+      "value": -1.6666666666666667
+    },
+    "blue_team_score": {
+      "value": 7.333333333333333
+    },
+    "avg_episode_length": {
+      "value": 454.3333333333333
+    }
+  },
+  "hard_constraints": {
+    "collision_rate": {
+      "value": 1.0,
+      "max": 0.1,
+      "passed": false
+    },
+    "out_of_bounds_rate": {
+      "value": 0.0,
+      "max": 0.05,
+      "passed": true
+    },
+    "action_violation_rate": {
+      "value": 0.0,
+      "max": 0.0,
+      "passed": true
+    }
+  },
+  "team_score": 5.666666666666667,
+  "score_margin": -1.6666666666666667,
+  "avg_episode_length": 454.3333333333333,
+  "feasible": false,
+  "decision": "rollback"
+}

@@ -1,0 +1,39 @@
+{
+  "trial_id": "trial_0010",
+  "hypothesis": "desired_speed=6.0, lane_spacing=1.2, risk_margin=1.2 should trade throughput against collision risk on vertical_wave.",
+  "seeds": [
+    11,
+    17,
+    23
+  ],
+  "train_command": [
+    "python",
+    "C:\\Users\\admin\\Desktop\\game-agent\\policies\\vertical_wave_3v3_rule_v1\\train.py",
+    "--config",
+    "C:\\Users\\admin\\Desktop\\game-agent\\experiments\\vertical_wave_3v3_exp_001\\trials\\trial_0010\\config.yaml",
+    "--scenario",
+    "C:\\Users\\admin\\Desktop\\game-agent\\scenarios\\vertical_wave_3v3_001",
+    "--seed",
+    "11",
+    "--output_dir",
+    "C:\\Users\\admin\\Desktop\\game-agent\\experiments\\vertical_wave_3v3_exp_001\\trials\\trial_0010\\checkpoint",
+    "--max_steps",
+    "800",
+    "--wall_time_limit",
+    "120"
+  ],
+  "infer_command": [
+    "python",
+    "C:\\Users\\admin\\Desktop\\game-agent\\policies\\vertical_wave_3v3_rule_v1\\infer.py",
+    "--checkpoint",
+    "C:\\Users\\admin\\Desktop\\game-agent\\experiments\\vertical_wave_3v3_exp_001\\trials\\trial_0010\\checkpoint\\checkpoint.json",
+    "--scenario",
+    "C:\\Users\\admin\\Desktop\\game-agent\\scenarios\\vertical_wave_3v3_001",
+    "--eval_seeds",
+    "11,17,23",
+    "--output",
+    "C:\\Users\\admin\\Desktop\\game-agent\\experiments\\vertical_wave_3v3_exp_001\\trials\\trial_0010\\infer_results.json"
+  ],
+  "wall_time_seconds": 9.65946160000749,
+  "decision": "rollback"
+}

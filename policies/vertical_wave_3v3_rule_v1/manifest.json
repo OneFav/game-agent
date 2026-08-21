@@ -1,0 +1,21 @@
+{
+  "created_at": "2026-07-01T14:04:12+00:00",
+  "files": [
+    "algorithm_card.md",
+    "default_config.yaml",
+    "infer.py",
+    "metadata.json",
+    "policy.py",
+    "requirements.txt",
+    "search_space.yaml",
+    "tests/test_action_bounds.py",
+    "tests/test_deterministic.py",
+    "tests/test_no_side_effects.py",
+    "tests/test_policy_class.py",
+    "train.py"
+  ],
+  "freeze_hash": "902be496e49fd8bd6295c225995fe2e1d88e67430105ff04c5633db75ef0c75e",
+  "package_id": "vertical_wave_3v3_rule_v1",
+  "package_type": "policy",
+  "schema_version": "1.0"
+}

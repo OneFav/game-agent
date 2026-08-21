@@ -1,0 +1,21 @@
+engine: swarm_combat
+gate_layout: vertical_wave
+max_steps: 600
+dt: 0.05
+n_red: 3
+n_red_racers: 2
+n_blue: 3
+n_blue_racers: 2
+spawn_mode: random
+spawn_min_separation: 1.8
+gate_pass_reward: 1.0
+max_speed: 8.0
+max_accel: 10.0
+safety_radius: 0.5
+inter_team_safe_dist: 0.8
+intra_team_safe_dist: 0.6
+collision_ends_episode: true
+out_of_bounds_ends_episode: true
+observation_dim: 94
+action_low: [-10.0, -10.0, -10.0]
+action_high: [10.0, 10.0, 10.0]

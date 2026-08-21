@@ -26,6 +26,36 @@ policy_dir: Path = designer.build(scenario_dir: Path, policy_id: str)
 - 读取 `task_spec.yaml` 中的 `action_space`、`observation_space`、`reward_structure`、`evaluation_metrics`、`termination_conditions`
 - **绝对禁止**修改场景包中的任何文件
 
+### 1.5 运行模式
+调用方必须明确本轮模式：
+- `mode=initial`：生成基础红蓝策略结构，与当前默认行为一致；建立 RedPolicy/BluePolicy、默认配置和搜索空间。
+- `mode=red`：本轮只选择和修改红方策略/红方参数，使红方在当前蓝方算法下取得优势。
+- `mode=blue`：本轮只选择和修改蓝方策略/蓝方参数，使蓝方在当前红方算法下取得优势。
+
+`mode=red` 时蓝方策略视为冻结对手；`mode=blue` 时红方策略视为冻结对手。允许修改 `PolicyClass` 分派器和通用 safety/clip 代码，但不得借此改变被冻结一方的决策逻辑。
+
+### 1.6 成功指标职责
+策略选择智能体负责定义本轮优化目标，场景包只提供中性观测指标。策略包必须写入 `optimization_target`（可在 `metadata.json`、`algorithm_card.md` 或等价配置中表达）：
+```yaml
+optimization_target:
+  mode: red        # initial / red / blue
+  primary: red_advantage
+  threshold: 0.0
+  definition: red_utility - blue_utility
+  utility_definition:
+    red_utility: avg_red_score
+    blue_utility: avg_blue_score
+```
+
+默认阈值为 `0.0`。`mode=red` 使用 `red_utility - blue_utility > 0` 判定红方优势；`mode=blue` 使用 `blue_utility - red_utility > 0` 判定蓝方优势；`mode=initial` 只建立基线，不强行声明某方达标。
+
+`red_utility` / `blue_utility` 必须显式定义来源，优先级为：
+1. 使用策略包 `optimization_target.utility_definition`。
+2. 否则使用实验 evaluator 输出的 `red_score` / `blue_score`。
+3. 若只有 reward，则使用跨 seed 平均累计 reward。
+
+`algorithm_card.md` 必须写明实际采用的 utility 来源，避免把 reward components、score 和统计指标混用。
+
 ### 2. 生成 Policy Package 文件
 必须输出以下完整文件结构：
 
@@ -78,6 +108,25 @@ class PolicyClass(Policy):
         """是否支持训练。规则策略返回 False，学习型策略返回 True"""
         ...
 ```
+
+### 3.5 红蓝策略显式分离（对抗任务强制）
+当场景包含红蓝对抗、`formalism=POSG`、`MarkovGame` 或多队伍角色时，策略代码必须显式区分红蓝双方，不能只把红蓝逻辑隐式混在一个共享分支里。
+
+最小合规结构：
+```python
+class RedPolicy:
+    """Only red-side behavior."""
+
+class BluePolicy:
+    """Only blue-side behavior."""
+
+class PolicyClass(Policy):
+    """Policy ABC adapter; dispatches by agent_id/team and clips final actions."""
+```
+
+也可以拆为 `red_policy.py` / `blue_policy.py`，但 `policy.py` 必须继续导出 `PolicyClass` 作为统一入口。`PolicyClass.act()` 只负责识别 team/role、调用对应红/蓝策略、执行异常回退和 action bounds 裁剪。
+
+`default_config.yaml`、`search_space.yaml` 和 `get_config_schema()` 必须显式表达红蓝参数边界，例如 `red_desired_speed`、`red_risk_margin`、`blue_desired_speed`、`blue_intercept_gain`。若红蓝确实共享某个参数，必须用 `shared_` 前缀命名并在 `algorithm_card.md` 说明原因。
 
 ### 4. train.py 命令行签名（严格遵循 INTERFACE_2_POLICY_TO_AUTORESEARCH.md §3）
 
@@ -151,6 +200,7 @@ python policies/<policy_id>/infer.py \
 - 所有字段必须出现在 `get_config_schema()` 返回值中
 - 分层结构：`priority_1`（核心调优）> `priority_2`（次要调优）> `do_not_tune`（固定参数）
 - 每个参数声明类型、范围/取值列表、默认值
+- 对抗任务中红蓝可调参数必须显式分组或加前缀，禁止使用含义不清的全局参数同时驱动双方行为，除非使用 `shared_` 前缀并说明共享理由
 
 ### algorithm_card.md 必需章节
 Family, Compatible Scenarios, Assumptions, Input/Output, Training Method, Safety Mechanism, Known Limitations, Expected Failure Modes, Computational Requirements
@@ -193,6 +243,7 @@ python -m pytest policies/<policy_id>/tests/ -v
 - [x] train.py 和 infer.py 命令行签名严格符合 Interface Contract 2
 - [x] default_config.yaml、search_space.yaml、algorithm_card.md、requirements.txt 全部存在
 - [x] search_space.yaml 中所有字段出现在 get_config_schema() 返回值中
+- [x] 对抗任务的策略代码显式包含 RedPolicy/BluePolicy 或等价红蓝分离模块
 - [x] 包内 4 个 tests 全部通过
 - [x] act() 输出始终在 [action_space.low, action_space.high] 范围内
 - [x] manifest.json 包含 freeze_hash 和 training_estimate

@@ -50,6 +50,11 @@ scenarios/<task_id>/
 ### 3. task_spec.yaml 必须包含的 11 个字段
 schema_version, task_id, task_family, formalism, agents, observation_space, action_space, reward_structure, evaluation_metrics, termination_conditions, splits
 
+### 3.5 指标职责边界
+场景编译器只定义中性环境观测指标和硬约束，不决定某一方策略的成功目标。`evaluation_metrics` 可包含 `red_score`、`blue_score`、`collision_rate`、`out_of_bounds_rate`、`episode_length`、`action_violation_rate` 等可观测量；不得把“红方成功”“蓝方成功”“优势方达标阈值”写死为唯一 primary objective。
+
+具体优化目标由 Policy Designer 根据 `mode=initial|red|blue` 写入策略包，再由 Experiment AutoResearch 按该目标迭代。
+
 ### 4. 默认值处理（assumptions.md）
 每个未在自然语言中明确的参数必须：
 - 选择保守默认值
@@ -77,6 +82,7 @@ schema_version, task_id, task_family, formalism, agents, observation_space, acti
 
 ### Schema 合规性
 - `evaluation_metrics.primary.name` **不能**与 `reward_structure.components[*].name` 中任何名称相同 — 这是防止 reward hacking 的关键防线
+- `evaluation_metrics` 应保持中性可观测，不替红/蓝任何一方定义最终成功阈值
 - `action_space.shape`、`action_space.low`、`action_space.high` 长度必须一致
 - `hard_constraints` 至少包含 `collision_rate`（碰撞率）
 

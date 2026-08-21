@@ -1,0 +1,135 @@
+schema_version: "1.0"
+task_id: vertical_wave_3v3_001
+task_family: drone_ring_game
+formalism: POSG
+agents:
+  - id: red_racer_0
+    team: red
+    role: racer
+    objective: maximize_team_gate_progress
+  - id: red_racer_1
+    team: red
+    role: racer
+    objective: maximize_team_gate_progress
+  - id: red_defender_0
+    team: red
+    role: defender
+    behavior_mode: escort
+    objective: protect_red_racers
+  - id: blue_racer_0
+    team: blue
+    role: racer
+    objective: contest_and_score
+  - id: blue_racer_1
+    team: blue
+    role: racer
+    objective: contest_and_score
+  - id: blue_defender_0
+    team: blue
+    role: defender
+    behavior_mode: intercept
+    objective: disrupt_red_progress
+communication:
+  mode: perfect
+scenario_parameters:
+  engine: swarm_combat
+  gate_layout: vertical_wave
+  gate_count: 6
+  spawn_mode: random
+  max_steps: 600
+  team_score_definition: normalized_red_gate_pass_count
+observation_space:
+  type: Box
+  shape: [94]
+  dtype: float32
+  low: [-50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -1.0, -1.0, -50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -1.0, -1.0, -50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -1.0, -1.0, -50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -1.0, -1.0, -50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -1.0, -1.0, -50.0, -50.0, -50.0, -1.0, -1.0, -1.0, 0.0, 0.0, -50.0, -50.0, -50.0, -1.0, -1.0, -1.0, 0.0, 0.0, -50.0, -50.0, -50.0, -1.0, -1.0, -1.0, 0.0, 0.0, -50.0, -50.0, -50.0, -1.0, -1.0, -1.0, 0.0, 0.0, -50.0, -50.0, -50.0, -1.0, -1.0, -1.0, 0.0, 0.0, -50.0, -50.0, -50.0, -1.0, -1.0, -1.0, 0.0, 0.0]
+  high: [50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 1.0, 1.0, 50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 1.0, 1.0, 50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 1.0, 1.0, 50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 1.0, 1.0, 50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 1.0, 1.0, 50.0, 50.0, 50.0, 1.0, 1.0, 1.0, 1.0, 1.0, 50.0, 50.0, 50.0, 1.0, 1.0, 1.0, 1.0, 1.0, 50.0, 50.0, 50.0, 1.0, 1.0, 1.0, 1.0, 1.0, 50.0, 50.0, 50.0, 1.0, 1.0, 1.0, 1.0, 1.0, 50.0, 50.0, 50.0, 1.0, 1.0, 1.0, 1.0, 1.0, 50.0, 50.0, 50.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+  partial_observability: true
+  description: "6 维自状态 + 5 个其他无人机的相对状态块（各 8 维）+ 6 个门的相对状态块（各 8 维），总计 94 维。"
+action_space:
+  type: Box
+  shape: [3]
+  dtype: float32
+  low: [-10.0, -10.0, -10.0]
+  high: [10.0, 10.0, 10.0]
+  semantics: acceleration_setpoint
+  description: "[ax, ay, az] body-frame acceleration command for the 3D swarm_combat wrapper."
+reward_structure:
+  shaping: dense
+  components:
+    - name: red_gate_progress
+      weight: 1.0
+      description: Red effective gate pass contributes normalized team progress.
+    - name: blue_gate_progress
+      weight: 1.0
+      description: Blue effective gate pass contributes normalized team progress and couples red utility through score margin.
+    - name: lane_assignment_bonus
+      weight: 0.25
+      description: Encourage paired racers to maintain separated lanes through each gate.
+    - name: intercept_pressure
+      weight: 0.2
+      description: Encourage defender pressure on opposing racers.
+    - name: escort_protection
+      weight: 0.2
+      description: Reward escort behavior around allied racers.
+    - name: cross_team_safety_penalty
+      weight: -0.5
+      description: Penalize near-safety-distance violations.
+    - name: collision_penalty
+      weight: -5.0
+      description: Penalize any collision.
+    - name: boundary_penalty
+      weight: -5.0
+      description: Penalize out-of-bounds.
+    - name: time_penalty
+      weight: -0.01
+      description: Encourage efficient completion.
+evaluation_metrics:
+  primary:
+    name: team_score
+    direction: maximize
+    promotion_threshold: 3.0
+    description: "Average normalized red team score, equal to red effective gate pass count because gate_pass_reward=1.0."
+  secondary:
+    - name: score_margin
+      direction: maximize
+    - name: red_score
+      direction: maximize
+    - name: blue_score
+      direction: maximize
+    - name: blue_team_score
+      direction: minimize
+    - name: lane_conflict_count
+      direction: minimize
+    - name: near_miss_count
+      direction: minimize
+    - name: avg_episode_length
+      direction: minimize
+  hard_constraints:
+    - name: collision_rate
+      direction: minimize
+      max: 0.05
+      description: Fraction of episodes with any collision event must remain low.
+    - name: out_of_bounds_rate
+      direction: minimize
+      max: 0.01
+      description: Fraction of episodes with any out-of-bounds event.
+    - name: action_violation_rate
+      direction: minimize
+      max: 0.0
+      description: Policy outputs must already satisfy the action bounds.
+termination_conditions:
+  - type: target_score
+    score: 6.0
+    description: Either team reaches six effective gate passes.
+  - type: collision_any
+    description: Episode ends when a collision rule triggers.
+  - type: out_of_bounds
+    description: Episode ends when any drone leaves the valid field.
+  - type: timeout
+    steps: 600
+    description: Episode truncates at 600 steps.
+splits:
+  train_seeds: [0, 1, 2, 3, 4, 5]
+  eval:
+    seeds: [11, 17, 23]

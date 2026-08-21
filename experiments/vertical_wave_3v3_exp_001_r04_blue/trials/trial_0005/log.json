@@ -1,0 +1,20 @@
+{
+  "trial_id": "trial_0005",
+  "target_side": "blue",
+  "hypothesis": "Escort with faster racers and long pressure radius tests whether extra speed improves all-seed blue margin after guard.",
+  "modified": "config",
+  "frozen_opponent": "red",
+  "seeds": [
+    11,
+    17,
+    23
+  ],
+  "utility_source": "avg_blue_score / avg_red_score from evaluator score outputs",
+  "wall_time_seconds": 21.306001,
+  "gate_checks": {
+    "hard_constraints_passed": true,
+    "blue_minus_red_positive": true,
+    "all_seed_positive": false
+  },
+  "failure_reason": "insufficient_or_unstable_blue_advantage"
+}

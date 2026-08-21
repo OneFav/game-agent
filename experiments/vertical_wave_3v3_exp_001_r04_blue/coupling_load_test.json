@@ -1,0 +1,46 @@
+{
+  "target_side": "blue",
+  "utility_side": "blue",
+  "utility_source": "avg_blue_score / avg_red_score from evaluator score outputs",
+  "seeds": [
+    11,
+    17,
+    23
+  ],
+  "true_opponent_score": 8.333333333333334,
+  "empty_field_score": 14.0,
+  "delta": 5.666666666666666,
+  "passed": true,
+  "per_seed": [
+    {
+      "seed": 11,
+      "red_score": 0.0,
+      "blue_score": 13.0,
+      "side_score": 13.0,
+      "collision": false,
+      "out_of_bounds": false,
+      "episode_length": 600,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 17,
+      "red_score": 0.0,
+      "blue_score": 14.0,
+      "side_score": 14.0,
+      "collision": false,
+      "out_of_bounds": false,
+      "episode_length": 600,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 23,
+      "red_score": 0.0,
+      "blue_score": 15.0,
+      "side_score": 15.0,
+      "collision": false,
+      "out_of_bounds": false,
+      "episode_length": 600,
+      "action_violation_rate": 0.0
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "trial_id": "trial_0014",
+  "target_side": "red",
+  "frozen_opponent": "blue",
+  "hypothesis": "Changing red_desired_speed=7.0, red_risk_margin=0.65, red_lane_spacing=1.9, red_escape_gain=1.25 should improve red gate progress without violating safety constraints.",
+  "modified": "parameters",
+  "seeds": [
+    11,
+    17,
+    23
+  ],
+  "train_command": [
+    "D:\\anaconda\\python.exe",
+    "C:\\Users\\admin\\Desktop\\researchs\\Autogame-codex\\policies\\vertical_wave_3v3_rule_v1_r05_red\\train.py",
+    "--config",
+    "C:\\Users\\admin\\Desktop\\researchs\\Autogame-codex\\experiments\\vertical_wave_3v3_exp_001_r05_red\\trials\\trial_0014\\config.yaml",
+    "--scenario",
+    "C:\\Users\\admin\\Desktop\\researchs\\Autogame-codex\\scenarios\\vertical_wave_3v3_001",
+    "--seed",
+    "11",
+    "--output_dir",
+    "C:\\Users\\admin\\Desktop\\researchs\\Autogame-codex\\experiments\\vertical_wave_3v3_exp_001_r05_red\\trials\\trial_0014\\checkpoint",
+    "--max_steps",
+    "600",
+    "--wall_time_limit",
+    "30"
+  ],
+  "infer_command": [
+    "D:\\anaconda\\python.exe",
+    "C:\\Users\\admin\\Desktop\\researchs\\Autogame-codex\\policies\\vertical_wave_3v3_rule_v1_r05_red\\infer.py",
+    "--checkpoint",
+    "C:\\Users\\admin\\Desktop\\researchs\\Autogame-codex\\experiments\\vertical_wave_3v3_exp_001_r05_red\\trials\\trial_0014\\checkpoint\\checkpoint.json",
+    "--scenario",
+    "C:\\Users\\admin\\Desktop\\researchs\\Autogame-codex\\scenarios\\vertical_wave_3v3_001",
+    "--eval_seeds",
+    "11,17,23",
+    "--output",
+    "C:\\Users\\admin\\Desktop\\researchs\\Autogame-codex\\experiments\\vertical_wave_3v3_exp_001_r05_red\\trials\\trial_0014\\infer_results.json"
+  ],
+  "train_returncode": 0,
+  "infer_returncode": 0,
+  "train_stderr": "",
+  "infer_stderr": "",
+  "wall_time_seconds": 24.68232909985818,
+  "target_passed": false,
+  "hard_constraints_passed": true,
+  "failure_reason": "red_utility_minus_blue_utility_not_positive"
+}

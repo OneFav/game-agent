@@ -1,0 +1,79 @@
+{
+  "target_side": "blue",
+  "red_score": 7.333333333333333,
+  "blue_score": 2.6666666666666665,
+  "target_side_score": 2.6666666666666665,
+  "blue_utility_minus_red_utility": -4.666666666666666,
+  "advantage_score": -4.666666666666666,
+  "collision_rate": 0.3333333333333333,
+  "out_of_bounds_rate": 0.0,
+  "action_violation_rate": 0.0,
+  "avg_episode_length": 599.6666666666666,
+  "primary_std": 2.0548046676563256,
+  "hard_constraints_passed": false,
+  "promotion_gate_passed": false,
+  "target_gate_passed": false,
+  "decision": "rollback",
+  "best_response_gain_side": -5.333333333333334,
+  "failure_episodes": [
+    {
+      "seed": 11,
+      "failure_type": "insufficient_blue_advantage"
+    },
+    {
+      "seed": 17,
+      "failure_type": "collision"
+    },
+    {
+      "seed": 23,
+      "failure_type": "insufficient_blue_advantage"
+    }
+  ],
+  "per_seed_metrics": [
+    {
+      "seed": 11,
+      "red_score": 8.0,
+      "blue_score": 1.0,
+      "team_score": 8.0,
+      "blue_team_score": 1.0,
+      "advantage_score": -7.0,
+      "score_margin": 7.0,
+      "collision": false,
+      "out_of_bounds": false,
+      "collision_rate": 0.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 600,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 17,
+      "red_score": 6.0,
+      "blue_score": 4.0,
+      "team_score": 6.0,
+      "blue_team_score": 4.0,
+      "advantage_score": -2.0,
+      "score_margin": 2.0,
+      "collision": true,
+      "out_of_bounds": false,
+      "collision_rate": 1.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 599,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 23,
+      "red_score": 8.0,
+      "blue_score": 3.0,
+      "team_score": 8.0,
+      "blue_team_score": 3.0,
+      "advantage_score": -5.0,
+      "score_margin": 5.0,
+      "collision": false,
+      "out_of_bounds": false,
+      "collision_rate": 0.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 600,
+      "action_violation_rate": 0.0
+    }
+  ]
+}

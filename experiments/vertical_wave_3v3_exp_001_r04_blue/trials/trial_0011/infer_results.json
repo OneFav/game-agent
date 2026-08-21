@@ -1,0 +1,100 @@
+{
+  "metrics": {
+    "primary": {
+      "name": "blue_advantage",
+      "value": 1.666666666666667,
+      "std": 3.299831645537222,
+      "n": 3
+    },
+    "secondary": {
+      "red_score": {
+        "value": 6.333333333333333
+      },
+      "blue_score": {
+        "value": 8.0
+      },
+      "advantage_score": {
+        "value": 1.666666666666667
+      },
+      "score_margin": {
+        "value": -1.6666666666666667
+      },
+      "blue_team_score": {
+        "value": 8.0
+      },
+      "avg_episode_length": {
+        "value": 600.0
+      }
+    },
+    "hard_constraints": {
+      "collision_rate": {
+        "value": 0.0,
+        "max": 0.05,
+        "passed": true
+      },
+      "out_of_bounds_rate": {
+        "value": 0.0,
+        "max": 0.01,
+        "passed": true
+      },
+      "action_violation_rate": {
+        "value": 0.0,
+        "max": 0.0,
+        "passed": true
+      }
+    }
+  },
+  "per_seed_metrics": [
+    {
+      "seed": 11,
+      "red_score": 4.0,
+      "blue_score": 8.0,
+      "team_score": 4.0,
+      "blue_team_score": 8.0,
+      "advantage_score": 4.0,
+      "score_margin": -4.0,
+      "collision": false,
+      "out_of_bounds": false,
+      "collision_rate": 0.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 600,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 17,
+      "red_score": 10.0,
+      "blue_score": 7.0,
+      "team_score": 10.0,
+      "blue_team_score": 7.0,
+      "advantage_score": -3.0,
+      "score_margin": 3.0,
+      "collision": false,
+      "out_of_bounds": false,
+      "collision_rate": 0.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 600,
+      "action_violation_rate": 0.0
+    },
+    {
+      "seed": 23,
+      "red_score": 5.0,
+      "blue_score": 9.0,
+      "team_score": 5.0,
+      "blue_team_score": 9.0,
+      "advantage_score": 4.0,
+      "score_margin": -4.0,
+      "collision": false,
+      "out_of_bounds": false,
+      "collision_rate": 0.0,
+      "out_of_bounds_rate": 0.0,
+      "episode_length": 600,
+      "action_violation_rate": 0.0
+    }
+  ],
+  "failure_episodes": [
+    {
+      "seed": 17,
+      "failure_type": "insufficient_blue_advantage"
+    }
+  ]
+}

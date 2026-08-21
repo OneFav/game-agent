@@ -1,0 +1,61 @@
+{
+  "action_violation_rate": 0.0,
+  "advantage_score": 1.666666666666667,
+  "avg_episode_length": 600.0,
+  "best_response_gain_side": null,
+  "blue_score": 4.0,
+  "collision_rate": 0.0,
+  "hard_constraints_passed": true,
+  "out_of_bounds_rate": 0.0,
+  "per_seed_metrics": [
+    {
+      "action_violation_rate": 0.0,
+      "advantage_score": -5.0,
+      "blue_score": 7.0,
+      "blue_team_score": 7.0,
+      "collision": false,
+      "collision_rate": 0.0,
+      "episode_length": 600,
+      "out_of_bounds": false,
+      "out_of_bounds_rate": 0.0,
+      "red_score": 2.0,
+      "score_margin": -5.0,
+      "seed": 11,
+      "team_score": 2.0
+    },
+    {
+      "action_violation_rate": 0.0,
+      "advantage_score": 0.0,
+      "blue_score": 5.0,
+      "blue_team_score": 5.0,
+      "collision": false,
+      "collision_rate": 0.0,
+      "episode_length": 600,
+      "out_of_bounds": false,
+      "out_of_bounds_rate": 0.0,
+      "red_score": 5.0,
+      "score_margin": 0.0,
+      "seed": 17,
+      "team_score": 5.0
+    },
+    {
+      "action_violation_rate": 0.0,
+      "advantage_score": 10.0,
+      "blue_score": 0.0,
+      "blue_team_score": 0.0,
+      "collision": false,
+      "collision_rate": 0.0,
+      "episode_length": 600,
+      "out_of_bounds": false,
+      "out_of_bounds_rate": 0.0,
+      "red_score": 10.0,
+      "score_margin": 10.0,
+      "seed": 23,
+      "team_score": 10.0
+    }
+  ],
+  "primary_std": 3.2998316455372216,
+  "red_score": 5.666666666666667,
+  "target_side": "initial",
+  "target_side_score": 5.666666666666667
+}
