@@ -1,0 +1,49 @@
+{
+  "trial_id": "trial_0011",
+  "round": "round2",
+  "hypothesis": "round2: refine around racer_gain=0.92 / intercept_gain=0.6 with avoidance=0.3 and boundary=0.58",
+  "scenario_id": "slalom_1v1_3d_001",
+  "policy_id": "slalom_1v1_3d_rule_v1",
+  "config": {
+    "racer_gain": 0.92,
+    "intercept_gain": 0.6,
+    "avoidance_gain": 0.3,
+    "boundary_gain": 0.58,
+    "prediction_horizon": 0.55,
+    "velocity_damping": 0.18,
+    "brake_bias": 0.25
+  },
+  "train_command": [
+    "python",
+    "./policies\\slalom_1v1_3d_rule_v1\\train.py",
+    "--config",
+    "./experiments\\slalom_1v1_3d_exp_001\\trials\\trial_0011\\config.yaml",
+    "--scenario",
+    "./scenarios\\slalom_1v1_3d_001",
+    "--seed",
+    "100",
+    "--output_dir",
+    "./experiments\\slalom_1v1_3d_exp_001\\trials\\trial_0011\\checkpoint",
+    "--max_steps",
+    "400",
+    "--wall_time_limit",
+    "60"
+  ],
+  "infer_command": [
+    "python",
+    "./policies\\slalom_1v1_3d_rule_v1\\infer.py",
+    "--checkpoint",
+    "./experiments\\slalom_1v1_3d_exp_001\\trials\\trial_0011\\checkpoint\\checkpoint.json",
+    "--scenario",
+    "./scenarios\\slalom_1v1_3d_001",
+    "--eval_seeds",
+    "100,101,102",
+    "--output",
+    "./experiments\\slalom_1v1_3d_exp_001\\trials\\trial_0011\\infer_results.json"
+  ],
+  "decision": "promote",
+  "stdout": {
+    "train": "",
+    "infer": ""
+  }
+}

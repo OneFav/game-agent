@@ -1,0 +1,7 @@
+policy_type: rule_ring_navigation
+speed_scale: 1.3
+intercept_gain: 0.55
+safety_margin: 1.0
+blue_gate_bias: 0.3
+memory_decay: 0.85
+recovery_gain: 1.1

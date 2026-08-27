@@ -1,0 +1,38 @@
+engine: swarm_combat
+semantic_task_family: swarm_combat
+gate_layout: figure_eight
+max_steps: 1200
+dt: 0.05
+n_red: 4
+n_red_racers: 2
+n_blue: 4
+n_blue_racers: 2
+spawn_mode: fixed
+spawn_red_positions:
+  - [-22.0, -6.0, 4.0]
+  - [-22.0, -2.0, 5.0]
+  - [-24.0, -8.0, 4.5]
+  - [-24.0, 0.0, 5.5]
+spawn_blue_positions:
+  - [22.0, 6.0, 4.0]
+  - [22.0, 2.0, 5.0]
+  - [24.0, 8.0, 4.5]
+  - [24.0, 0.0, 5.5]
+gate_pass_reward: 1.0
+target_score: null
+safety_radius: 0.45
+inter_team_safe_dist: 0.8
+intra_team_safe_dist: 0.7
+racer_dynamics: damped_double_integrator
+racer_max_speed: 8.0
+racer_max_accel: 9.0
+racer_drag: 0.12
+defender_dynamics: damped_double_integrator
+defender_max_speed: 7.0
+defender_max_accel: 8.0
+defender_drag: 0.18
+collision_ends_episode: true
+out_of_bounds_ends_episode: true
+observation_dim: 110
+action_low: [-10.0, -10.0, -10.0]
+action_high: [10.0, 10.0, 10.0]

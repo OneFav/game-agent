@@ -18,6 +18,7 @@ def test_build_policy_package_from_scenario(tmp_path: Path) -> None:
         "search_space.yaml",
         "algorithm_card.md",
         "requirements.txt",
+        "metadata.json",
         "manifest.json",
     ]:
         assert (policy_dir / name).exists()
@@ -29,6 +30,13 @@ def test_build_policy_package_from_scenario(tmp_path: Path) -> None:
     ]:
         assert (policy_dir / "tests" / name).exists()
     assert read_yaml(policy_dir / "default_config.yaml")["policy_type"] == "rule_ring_navigation"
+    metadata = read_json(policy_dir / "metadata.json")
+    assert metadata["method"]["name"] == "rule_ring_navigation"
+    assert metadata["method_hypothesis"]["statement"]
+    assert metadata["method_hypothesis"]["optimization_guidance"]
+    assert metadata["immutable_boundaries"]["evaluation_source"] == "scenario.evaluation_metrics"
+    assert metadata["immutable_boundaries"]["method_invariants"]
+    assert metadata["checkpoint_binding"]["observation_contract"] == "scenario.observation_space"
 
 
 def test_policy_search_space_contains_autoresearch_fields(tmp_path: Path) -> None:
@@ -245,6 +253,15 @@ def test_generated_train_validates_inputs(tmp_path: Path) -> None:
     assert valid.returncode == 0, valid.stdout + valid.stderr
     for name in ["checkpoint_final.pt", "training_curves.csv", "training_log.json", "stdout.log"]:
         assert (output_dir / name).exists()
+    curve_header = (output_dir / "training_curves.csv").read_text(encoding="utf-8").splitlines()[0]
+    assert curve_header.split(",") == [
+        "step",
+        "episode",
+        "reward_mean",
+        "actor_loss",
+        "critic_loss",
+        "evaluation_primary",
+    ]
     training_log = read_json(output_dir / "training_log.json")
     for key in [
         "schema_version",

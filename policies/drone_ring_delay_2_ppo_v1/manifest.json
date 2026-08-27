@@ -1,0 +1,19 @@
+{
+  "files": [
+    "algorithm_card.md",
+    "default_config.yaml",
+    "infer.py",
+    "metadata.json",
+    "policy.py",
+    "requirements.txt",
+    "search_space.yaml",
+    "tests/test_policy.py",
+    "tests/test_training_smoke.py",
+    "train.py"
+  ],
+  "freeze_hash": "9bde7c84569afeda62d219aa9e043d76eec28bd945c5a7976a7ff69c45f931ae",
+  "package_id": "drone_ring_delay_2_ppo_v1",
+  "package_type": "policy",
+  "scenario_id": "drone_ring_delay_2_001",
+  "schema_version": "1.0"
+}

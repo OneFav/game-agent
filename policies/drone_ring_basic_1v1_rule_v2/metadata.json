@@ -1,0 +1,55 @@
+{
+  "checkpoint_binding": {
+    "action_contract": "scenario.action_space",
+    "method": "rule_ring_navigation",
+    "observation_contract": "scenario.observation_space",
+    "preprocessing": "none"
+  },
+  "formalism": "POSG",
+  "immutable_boundaries": {
+    "evaluation_source": "scenario.evaluation_metrics",
+    "forbidden_changes": [
+      "Do not modify the frozen scenario package.",
+      "Do not rank candidates by training reward.",
+      "Do not switch to another method family inside AutoResearch."
+    ],
+    "method_invariants": [
+      "Keep the rule_ring_navigation method family.",
+      "Keep execution observations within the scenario observation contract.",
+      "Clip every returned action to the scenario action bounds."
+    ],
+    "scenario_id": "drone_ring_basic_1v1_001"
+  },
+  "method": {
+    "execution_mode": "decentralized",
+    "explicit_opponent_model": false,
+    "family": "rule_based",
+    "frozen_parties": [
+      "all"
+    ],
+    "learning_paradigm": "none",
+    "name": "rule_ring_navigation",
+    "parameter_sharing": "not_applicable",
+    "selection_rationale": "The scenario exposes direct geometric direction fields, so a bounded rule controller is simpler and more reproducible than learning or receding-horizon optimization for this baseline.",
+    "trained_parties": [],
+    "training_privileged_state": false
+  },
+  "method_hypothesis": {
+    "optimization_guidance": [
+      "Tune motion and interception gains before changing policy code.",
+      "Treat safety_margin as a constraint-oriented parameter, not a reward proxy."
+    ],
+    "statement": "A bounded geometric controller is sufficient when ring-relative direction and interception direction dominate the decision.",
+    "suspected_bottlenecks": [
+      "speed versus maneuverability trade-off",
+      "interception pressure near the active ring",
+      "safety margin near action and arena boundaries"
+    ]
+  },
+  "policy_id": "drone_ring_basic_1v1_rule_v2",
+  "policy_type": "rule_ring_navigation",
+  "scenario_dir": "scenarios/drone_ring_basic_1v1_001",
+  "schema_version": "1.1",
+  "task_family": "drone_ring_game",
+  "task_id": "drone_ring_basic_1v1_001"
+}

@@ -1,0 +1,63 @@
+{
+  "comparison": {
+    "baseline": "policy.default_config",
+    "baseline_constraints_passed": true,
+    "baseline_std": 0.0,
+    "baseline_value": 1.0,
+    "candidate": "trial_0013",
+    "candidate_constraints_passed": true,
+    "candidate_std": 0.0,
+    "candidate_value": 1.0,
+    "direction": "maximize",
+    "direction_aware_delta": 0.0,
+    "n_seeds": 3,
+    "primary_metric": "success_rate",
+    "relative_improvement_percent": 0.0,
+    "seeds": [
+      0,
+      1,
+      2
+    ]
+  },
+  "disclosures": [
+    "No multi-step training curve was available; the process figure uses trial-level evaluation metrics and hard-constraint evidence."
+  ],
+  "figures": [
+    {
+      "data_sources": [
+        "scenario/task_spec.yaml",
+        "policy/metadata.json",
+        "policy/search_space.yaml"
+      ],
+      "id": "training_design",
+      "path": "figures/training_design.png",
+      "purpose": "Declare method, data contracts, optimization surface, and evidence budget."
+    },
+    {
+      "data_level": "trial_evaluation",
+      "data_sources": [
+        "leaderboard.csv",
+        "trials/*/metrics.json"
+      ],
+      "id": "training_process",
+      "path": "figures/training_process.png",
+      "purpose": "Show optimization progress, best-so-far behavior, and constraint feasibility."
+    },
+    {
+      "data_sources": [
+        "baseline_metrics.json",
+        "trials/trial_0013/metrics.json",
+        "best_config.yaml"
+      ],
+      "id": "training_effect",
+      "path": "figures/training_effect.png",
+      "purpose": "Compare the default-config baseline with the promoted best trial on identical seeds."
+    }
+  ],
+  "raw_data_tables": [
+    "leaderboard.csv",
+    "baseline_metrics.json"
+  ],
+  "schema_version": "1.0",
+  "standard": "training_visualization/v1"
+}

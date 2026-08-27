@@ -8,16 +8,58 @@ from game_agent.autoresearch.metrics import ranking_key, satisfies_hard_constrai
 from game_agent.autoresearch.runner import evaluate_policy_dir
 from game_agent.policy_designer import PolicyDesigner
 from game_agent.scenario_compiler import ScenarioCompiler
-from game_agent.utils.fs import read_yaml, write_yaml
+from game_agent.utils.fs import read_json, read_yaml, write_yaml
 
 
 def test_autoresearch_generates_experiment_package(tmp_path: Path) -> None:
     scenario = ScenarioCompiler(tmp_path).compile("红方穿过两个圆环，蓝方追击拦截，超时 60 步", "drone_ring_001")
     policy = PolicyDesigner(tmp_path).build(scenario, "rule_ring_nav_v1")
     exp_dir = AutoResearchRunner(tmp_path).run(scenario, policy, "exp_drone_ring_001")
-    for name in ["leaderboard.csv", "best_config.yaml", "report.md", "manifest.json"]:
+    for name in [
+        "leaderboard.csv",
+        "best_config.yaml",
+        "baseline_metrics.json",
+        "report.md",
+        "research_state.json",
+        "manifest.json",
+    ]:
         assert (exp_dir / name).exists()
     assert "speed_scale" in read_yaml(exp_dir / "best_config.yaml")
+    state = read_json(exp_dir / "research_state.json")
+    assert state["stage"] == 1
+    assert state["enabled_capabilities"] == ["existing_parameter_search"]
+    figures = exp_dir / "figures"
+    for name in [
+        "training_design.png",
+        "training_process.png",
+        "training_effect.png",
+    ]:
+        figure = figures / name
+        assert figure.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
+        assert figure.stat().st_size > 1_000
+    visualization_manifest = read_json(figures / "visualization_manifest.json")
+    assert visualization_manifest["standard"] == "training_visualization/v1"
+    assert {item["id"] for item in visualization_manifest["figures"]} == {
+        "training_design",
+        "training_process",
+        "training_effect",
+    }
+    assert visualization_manifest["comparison"]["seeds"]
+    assert visualization_manifest["comparison"]["n_seeds"] == len(
+        visualization_manifest["comparison"]["seeds"]
+    )
+    assert "baseline_std" in visualization_manifest["comparison"]
+    baseline = read_json(exp_dir / "baseline_metrics.json")
+    assert len(baseline["per_seed_metrics"]) == len(baseline["seeds"])
+    assert baseline["statistics"]["success_rate"]["n"] == len(baseline["seeds"])
+    first_trial = next((exp_dir / "trials").iterdir())
+    per_seed = read_json(first_trial / "per_seed_metrics.json")
+    assert len(per_seed["metrics"]) == len(per_seed["seeds"])
+    assert per_seed["statistics"]["success_rate"]["n"] == len(per_seed["seeds"])
+    report = (exp_dir / "report.md").read_text(encoding="utf-8")
+    assert "Raw comparison table" in report
+    assert "mean ± std" in report
+    assert "figures/training_design.png" in report
 
 
 def test_leaderboard_contains_primary_metric(tmp_path: Path) -> None:

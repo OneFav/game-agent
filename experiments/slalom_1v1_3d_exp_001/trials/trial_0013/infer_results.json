@@ -1,0 +1,86 @@
+{
+  "metrics": {
+    "primary": {
+      "name": "team_score",
+      "value": 1.0,
+      "std": 0.0,
+      "n": 3
+    },
+    "secondary": {
+      "blue_team_score": {
+        "value": 0.0
+      },
+      "red_win_rate": {
+        "value": 1.0
+      },
+      "avg_episode_length": {
+        "value": 40.0
+      },
+      "gate_pass_balance": {
+        "value": 1.0
+      }
+    },
+    "hard_constraints": {
+      "collision_rate": {
+        "value": 0.0,
+        "max": 0.05,
+        "passed": true
+      },
+      "out_of_bounds_rate": {
+        "value": 0.0,
+        "max": 0.01,
+        "passed": true
+      },
+      "action_violation_rate": {
+        "value": 0.0,
+        "max": 0.0,
+        "passed": true
+      }
+    }
+  },
+  "per_seed_metrics": [
+    {
+      "seed": 100,
+      "team_score": 1.0,
+      "blue_team_score": 0.0,
+      "red_win": true,
+      "collision": false,
+      "out_of_bounds": false,
+      "collision_rate": 0.0,
+      "out_of_bounds_rate": 0.0,
+      "action_violation_rate": 0.0,
+      "episode_length": 40,
+      "gate_pass_balance": 1.0,
+      "success": true
+    },
+    {
+      "seed": 101,
+      "team_score": 1.0,
+      "blue_team_score": 0.0,
+      "red_win": true,
+      "collision": false,
+      "out_of_bounds": false,
+      "collision_rate": 0.0,
+      "out_of_bounds_rate": 0.0,
+      "action_violation_rate": 0.0,
+      "episode_length": 40,
+      "gate_pass_balance": 1.0,
+      "success": true
+    },
+    {
+      "seed": 102,
+      "team_score": 1.0,
+      "blue_team_score": 0.0,
+      "red_win": true,
+      "collision": false,
+      "out_of_bounds": false,
+      "collision_rate": 0.0,
+      "out_of_bounds_rate": 0.0,
+      "action_violation_rate": 0.0,
+      "episode_length": 40,
+      "gate_pass_balance": 1.0,
+      "success": true
+    }
+  ],
+  "failure_episodes": []
+}

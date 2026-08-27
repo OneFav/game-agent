@@ -1,0 +1,16 @@
+{
+  "created_at": "2026-06-28T15:10:20+00:00",
+  "files": [
+    "assumptions.md",
+    "env.py",
+    "env_config.yaml",
+    "model.md",
+    "task_spec.yaml",
+    "tests/test_obs_action_shape.py",
+    "tests/test_reset_deterministic.py"
+  ],
+  "freeze_hash": "f77f54fd349f1e4d61d71f5e5d9ff2c8247ec180fbd05ce5cbd4974f60ec5514",
+  "package_id": "figure_eight_4v4_001",
+  "package_type": "scenario",
+  "schema_version": "1.0"
+}

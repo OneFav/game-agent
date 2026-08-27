@@ -1,21 +1,33 @@
 {
   "metrics": {
     "primary": {
-      "name": "success_rate",
-      "value": 0.0,
+      "name": "team_score",
+      "value": 6.0,
       "std": 0.0,
       "n": 3
     },
     "secondary": {
+      "avg_red_score": {
+        "value": 6.0
+      },
+      "avg_blue_score": {
+        "value": 7.0
+      },
       "avg_episode_length": {
-        "value": 70.0
+        "value": 600.0
+      },
+      "red_win_rate": {
+        "value": 0.0
+      },
+      "draw_rate": {
+        "value": 0.0
       }
     },
     "hard_constraints": {
       "collision_rate": {
-        "value": 1.0,
+        "value": 0.0,
         "max": 0.05,
-        "passed": false
+        "passed": true
       },
       "out_of_bounds_rate": {
         "value": 0.0,
@@ -29,53 +41,61 @@
       }
     }
   },
+  "raw_metrics": {
+    "team_score": 6.0,
+    "avg_red_score": 6.0,
+    "avg_blue_score": 7.0,
+    "avg_episode_length": 600.0,
+    "red_win_rate": 0.0,
+    "draw_rate": 0.0,
+    "collision_rate": 0.0,
+    "out_of_bounds_rate": 0.0,
+    "action_violation_rate": 0.0
+  },
   "per_seed_metrics": [
     {
       "seed": 100,
-      "success": false,
-      "collision": true,
+      "team_score": 6.0,
+      "red_score": 6.0,
+      "blue_score": 7.0,
+      "winner": "BLUE",
+      "termination_reason": "max_steps",
+      "collision": false,
       "out_of_bounds": false,
-      "success_rate": 0.0,
-      "collision_rate": 1.0,
-      "out_of_bounds_rate": 0.0,
-      "episode_length": 70,
-      "action_violation_rate": 0.0
+      "episode_length": 600,
+      "action_violation_rate": 0.0,
+      "red_win": 0.0,
+      "draw": 0.0
     },
     {
       "seed": 101,
-      "success": false,
-      "collision": true,
+      "team_score": 6.0,
+      "red_score": 6.0,
+      "blue_score": 7.0,
+      "winner": "BLUE",
+      "termination_reason": "max_steps",
+      "collision": false,
       "out_of_bounds": false,
-      "success_rate": 0.0,
-      "collision_rate": 1.0,
-      "out_of_bounds_rate": 0.0,
-      "episode_length": 70,
-      "action_violation_rate": 0.0
+      "episode_length": 600,
+      "action_violation_rate": 0.0,
+      "red_win": 0.0,
+      "draw": 0.0
     },
     {
       "seed": 102,
-      "success": false,
-      "collision": true,
+      "team_score": 6.0,
+      "red_score": 6.0,
+      "blue_score": 7.0,
+      "winner": "BLUE",
+      "termination_reason": "max_steps",
+      "collision": false,
       "out_of_bounds": false,
-      "success_rate": 0.0,
-      "collision_rate": 1.0,
-      "out_of_bounds_rate": 0.0,
-      "episode_length": 70,
-      "action_violation_rate": 0.0
+      "episode_length": 600,
+      "action_violation_rate": 0.0,
+      "red_win": 0.0,
+      "draw": 0.0
     }
   ],
-  "failure_episodes": [
-    {
-      "seed": 100,
-      "failure_type": "collision"
-    },
-    {
-      "seed": 101,
-      "failure_type": "collision"
-    },
-    {
-      "seed": 102,
-      "failure_type": "collision"
-    }
-  ]
+  "failure_episodes": [],
+  "feasible": true
 }

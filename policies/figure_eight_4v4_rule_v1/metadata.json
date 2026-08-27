@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "figure_eight_4v4_rule_v1",
+  "policy_type": "rule_based_safe_swarm",
+  "scenario_dir": "scenarios/figure_eight_4v4_001",
+  "task_id": "figure_eight_4v4_001",
+  "task_family": "drone_ring_game",
+  "formalism": "POSG",
+  "policy_class": "PolicyClass"
+}

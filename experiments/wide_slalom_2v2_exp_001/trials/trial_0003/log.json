@@ -1,78 +1,36 @@
 {
   "trial_id": "trial_0003",
-  "hypothesis": "racer_gain=0.75 and intercept_gain=1.0 test success/collision tradeoff on 32D wide_slalom_2v2",
+  "rank": 8,
+  "decision": "rollback",
+  "hypothesis": "reduce late gate risk; add safety margin.",
   "scenario_id": "wide_slalom_2v2_001",
-  "scenario_freeze_hash": "sha256:9d80edf247600a9ae9183a9a42e0c888a0eab68ffcf50b152a804c4de6289c7b",
   "policy_id": "wide_slalom_2v2_rule_v1",
-  "policy_freeze_hash": "sha256:b4fc694df6213eac6856641b7d9685cb7b506e54a55707b34c97f2fe05c7d3ba",
-  "config_fields_modified": [
-    "racer_gain",
-    "intercept_gain"
-  ],
-  "search_space_policy": "priority_1 min/default/max deterministic grid",
-  "ranking_source": "task_spec.evaluation_metrics only; reward_structure ignored",
   "seeds": [
     100,
     101,
     102
   ],
-  "train": {
-    "command": [
-      "D:\\anaconda\\python.exe",
-      "C:\\Users\\admin\\Desktop\\game-agent\\policies\\wide_slalom_2v2_rule_v1\\train.py",
-      "--config",
-      "C:\\Users\\admin\\Desktop\\game-agent\\experiments\\wide_slalom_2v2_exp_001\\trials\\trial_0003\\config.yaml",
-      "--scenario",
-      "C:\\Users\\admin\\Desktop\\game-agent\\scenarios\\wide_slalom_2v2_001",
-      "--seed",
-      "100",
-      "--output_dir",
-      "C:\\Users\\admin\\Desktop\\game-agent\\experiments\\wide_slalom_2v2_exp_001\\trials\\trial_0003\\checkpoint",
-      "--max_steps",
-      "600",
-      "--wall_time_limit",
-      "7200"
-    ],
-    "returncode": 0,
-    "stdout": "",
-    "stderr": ""
+  "primary_metric": {
+    "name": "team_score",
+    "value": 3.0,
+    "std": 0.0,
+    "n": 3
   },
-  "infer": {
-    "command": [
-      "D:\\anaconda\\python.exe",
-      "C:\\Users\\admin\\Desktop\\game-agent\\policies\\wide_slalom_2v2_rule_v1\\infer.py",
-      "--checkpoint",
-      "C:\\Users\\admin\\Desktop\\game-agent\\experiments\\wide_slalom_2v2_exp_001\\trials\\trial_0003\\checkpoint\\checkpoint.json",
-      "--scenario",
-      "C:\\Users\\admin\\Desktop\\game-agent\\scenarios\\wide_slalom_2v2_001",
-      "--eval_seeds",
-      "100,101,102",
-      "--output",
-      "C:\\Users\\admin\\Desktop\\game-agent\\experiments\\wide_slalom_2v2_exp_001\\trials\\trial_0003\\infer_results.json"
-    ],
-    "returncode": 0,
-    "stdout": "",
-    "stderr": ""
-  },
-  "promotion_gate": {
-    "hard_constraints_passed": false,
-    "primary_metric_gate": {
-      "passed": false,
-      "threshold": 0.75,
-      "value": 0.0
+  "hard_constraints": {
+    "collision_rate": {
+      "value": 1.0,
+      "max": 0.05,
+      "passed": false
     },
-    "stability_gate": {
-      "passed": true,
-      "std": 0.0,
-      "threshold": 0.05,
-      "seeds": [
-        100,
-        101,
-        102
-      ]
+    "out_of_bounds_rate": {
+      "value": 0.0,
+      "max": 0.01,
+      "passed": true
     },
-    "promotion_passed": false
-  },
-  "decision": "rollback",
-  "wall_time_seconds": 0.3764455998316407
+    "action_violation_rate": {
+      "value": 0.0,
+      "max": 0.0,
+      "passed": true
+    }
+  }
 }

@@ -13,10 +13,10 @@ def test_obs_action_shapes_match_contract():
     env = make_env()
     observations, infos = env.reset(seed=1)
     assert env.agents == ["red_racer_0", "red_defender_0", "blue_racer_0", "blue_defender_0"]
-    assert tuple(env.observation_shape) == (32,)
+    assert tuple(env.observation_shape) == (78,)
     assert tuple(env.action_shape) == (4,)
     assert all(obs.shape == env.observation_shape for obs in observations.values())
-    assert env.observation_space("red_racer_0").shape == (32,)
+    assert env.observation_space("red_racer_0").shape == (78,)
     assert env.action_space("red_racer_0").shape == (4,)
     for info in infos.values():
         assert {"collision", "out_of_bounds", "ring_passed_count", "communication_dropped", "action_clipped"} <= set(info)

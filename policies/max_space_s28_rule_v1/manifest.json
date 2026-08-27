@@ -1,0 +1,35 @@
+{
+  "created_at": "2026-08-01T09:26:21+00:00",
+  "files": [
+    "algorithm_card.md",
+    "default_config.yaml",
+    "infer.py",
+    "metadata.json",
+    "policy.py",
+    "requirements.txt",
+    "search_space.yaml",
+    "tests/test_action_bounds.py",
+    "tests/test_deterministic.py",
+    "tests/test_no_side_effects.py",
+    "tests/test_policy_class.py",
+    "train.py"
+  ],
+  "freeze_hash": "6cf4d6e624fe9fde694917a67e6d0827404a8dd7c04b604ca230eac99e3561e0",
+  "implementation_dependencies": [
+    {
+      "path": "src/game_agent/policy_designer/max_space_policy.py",
+      "sha256": "f62d83ff70055679695c88a626a8819ab13436e63e935e7725fc59728a94c34a"
+    }
+  ],
+  "package_id": "max_space_s28_rule_v1",
+  "package_type": "policy",
+  "schema_version": "1.1",
+  "training_estimate": {
+    "accelerator": "none",
+    "convergence_evidence": false,
+    "cpu_seconds": 1,
+    "curve_rows": 1,
+    "supports_training": false,
+    "trainer": "no_op_rule_parameter_materializer"
+  }
+}

@@ -12,7 +12,7 @@ import yaml
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Evaluate the wide_slalom_2v2 rule policy.")
+    parser = argparse.ArgumentParser(description="Evaluate the wide_slalom_2v2 swarm rule policy.")
     parser.add_argument("--checkpoint", required=True)
     parser.add_argument("--scenario", required=True)
     parser.add_argument("--eval_seeds", required=True)
@@ -29,15 +29,17 @@ def main() -> int:
         if not scenario_dir.is_dir():
             return 1
 
-        policy = _load_policy_class()(_load_checkpoint_config(Path(args.checkpoint)), _load_task_spec(scenario_dir))
+        task_spec = _load_task_spec(scenario_dir)
+        config = _load_checkpoint_config(Path(args.checkpoint))
+        policy = _load_policy_class()(config, task_spec)
         env_module = _load_env_module(scenario_dir)
         seeds = _parse_seeds(args.eval_seeds)
         per_seed = [_run_episode(env_module, policy, seed) for seed in seeds]
-        results = _summarize(per_seed, seeds)
+        results = _summarize(task_spec, per_seed, seeds)
 
         output = Path(args.output)
         output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(json.dumps(results, indent=2), encoding="utf-8")
+        output.write_text(json.dumps(results, indent=2, ensure_ascii=False), encoding="utf-8")
         return 0
     except MemoryError:
         return 3
@@ -112,64 +114,87 @@ def _run_episode(env_module: Any, policy: Any, seed: int) -> dict[str, Any]:
         if all(terminations.values()) or all(truncations.values()):
             break
 
-    red_info = latest_infos.get("red_racer_0", {})
-    success = int(red_info.get("gate_passed_count", red_info.get("ring_passed_count", 0))) >= len(getattr(env, "_gates", []))
+    anchor_info = latest_infos.get("red_racer_0", {})
+    team_scores = anchor_info.get("team_scores", {})
+    termination = anchor_info.get("termination", {})
+    red_score = float(team_scores.get("RED", 0.0))
+    blue_score = float(team_scores.get("BLUE", 0.0))
     collision = any(bool(info.get("collision", False)) for info in latest_infos.values())
     out_of_bounds = any(bool(info.get("out_of_bounds", False)) for info in latest_infos.values())
     denom = max(steps * len(getattr(env, "agents", [])), 1)
     return {
         "seed": seed,
-        "success": bool(success),
+        "team_score": red_score,
+        "red_score": red_score,
+        "blue_score": blue_score,
+        "winner": str(termination.get("winner", "UNKNOWN")),
+        "termination_reason": str(termination.get("reason", "unknown")),
         "collision": bool(collision),
         "out_of_bounds": bool(out_of_bounds),
-        "success_rate": 1.0 if success else 0.0,
-        "collision_rate": 1.0 if collision else 0.0,
-        "out_of_bounds_rate": 1.0 if out_of_bounds else 0.0,
         "episode_length": int(steps),
         "action_violation_rate": float(action_violations / denom),
+        "red_win": 1.0 if termination.get("winner") == "RED" else 0.0,
+        "draw": 1.0 if termination.get("winner") == "DRAW" else 0.0,
     }
 
 
-def _summarize(per_seed: list[dict[str, Any]], seeds: list[int]) -> dict[str, Any]:
+def _summarize(task_spec: dict[str, Any], per_seed: list[dict[str, Any]], seeds: list[int]) -> dict[str, Any]:
     count = max(len(per_seed), 1)
-    success_rate = sum(float(item["success_rate"]) for item in per_seed) / count
-    collision_rate = sum(float(item["collision_rate"]) for item in per_seed) / count
-    out_of_bounds_rate = sum(float(item["out_of_bounds_rate"]) for item in per_seed) / count
-    action_violation_rate = sum(float(item["action_violation_rate"]) for item in per_seed) / count
-    avg_episode_length = sum(float(item["episode_length"]) for item in per_seed) / count
-    primary_values = [float(item["success_rate"]) for item in per_seed]
+    team_scores = [float(item["team_score"]) for item in per_seed]
+    raw_metrics = {
+        "team_score": sum(team_scores) / count,
+        "avg_red_score": sum(float(item["red_score"]) for item in per_seed) / count,
+        "avg_blue_score": sum(float(item["blue_score"]) for item in per_seed) / count,
+        "avg_episode_length": sum(float(item["episode_length"]) for item in per_seed) / count,
+        "red_win_rate": sum(float(item["red_win"]) for item in per_seed) / count,
+        "draw_rate": sum(float(item["draw"]) for item in per_seed) / count,
+        "collision_rate": sum(1.0 for item in per_seed if item["collision"]) / count,
+        "out_of_bounds_rate": sum(1.0 for item in per_seed if item["out_of_bounds"]) / count,
+        "action_violation_rate": sum(float(item["action_violation_rate"]) for item in per_seed) / count,
+    }
+    hard_constraints = _build_hard_constraints(task_spec, raw_metrics)
+    feasible = all(entry.get("passed", False) for entry in hard_constraints.values())
     return {
         "metrics": {
             "primary": {
-                "name": "success_rate",
-                "value": success_rate,
-                "std": float(np.std(primary_values)) if primary_values else 0.0,
+                "name": "team_score",
+                "value": raw_metrics["team_score"],
+                "std": float(np.std(team_scores)) if team_scores else 0.0,
                 "n": len(seeds),
             },
-            "secondary": {"avg_episode_length": {"value": avg_episode_length}},
-            "hard_constraints": {
-                "collision_rate": {"value": collision_rate, "max": 0.05, "passed": collision_rate <= 0.05},
-                "out_of_bounds_rate": {"value": out_of_bounds_rate, "max": 0.01, "passed": out_of_bounds_rate <= 0.01},
-                "action_violation_rate": {"value": action_violation_rate, "max": 0.0, "passed": action_violation_rate <= 0.0},
+            "secondary": {
+                "avg_red_score": {"value": raw_metrics["avg_red_score"]},
+                "avg_blue_score": {"value": raw_metrics["avg_blue_score"]},
+                "avg_episode_length": {"value": raw_metrics["avg_episode_length"]},
+                "red_win_rate": {"value": raw_metrics["red_win_rate"]},
+                "draw_rate": {"value": raw_metrics["draw_rate"]},
             },
+            "hard_constraints": hard_constraints,
         },
+        "raw_metrics": raw_metrics,
         "per_seed_metrics": per_seed,
         "failure_episodes": [
-            {"seed": item["seed"], "failure_type": _failure_type(item)}
+            {
+                "seed": item["seed"],
+                "reason": item["termination_reason"],
+                "winner": item["winner"],
+            }
             for item in per_seed
-            if not item["success"] or item["collision"] or item["out_of_bounds"]
+            if item["collision"] or item["out_of_bounds"]
         ],
+        "feasible": feasible,
     }
 
 
-def _failure_type(item: dict[str, Any]) -> str:
-    if item["collision"]:
-        return "collision"
-    if item["out_of_bounds"]:
-        return "out_of_bounds"
-    if not item["success"]:
-        return "not_all_gates_passed"
-    return "unknown"
+def _build_hard_constraints(task_spec: dict[str, Any], raw_metrics: dict[str, float]) -> dict[str, Any]:
+    constraints = task_spec.get("evaluation_metrics", {}).get("hard_constraints", [])
+    built: dict[str, Any] = {}
+    for constraint in constraints:
+        name = str(constraint.get("name", ""))
+        max_value = float(constraint.get("max", 0.0))
+        value = float(raw_metrics.get(name, 0.0))
+        built[name] = {"value": value, "max": max_value, "passed": value <= max_value}
+    return built
 
 
 if __name__ == "__main__":

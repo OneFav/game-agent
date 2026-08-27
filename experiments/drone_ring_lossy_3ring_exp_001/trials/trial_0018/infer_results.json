@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0",
+  "status": "completed",
+  "policy_id": "drone_ring_lossy_3ring_rule_v1",
+  "checkpoint_hash": "sha256:25f4f637f9054aa664960e761b8685993cf3583627f162c3ca281c230d115705",
+  "scenario_id": "drone_ring_lossy_3ring_001",
+  "seeds_evaluated": [
+    0,
+    1,
+    2
+  ],
+  "n_episodes": 3,
+  "metrics": {
+    "primary": {
+      "name": "success_rate",
+      "value": 0.3333333333333333,
+      "direction": "maximize",
+      "mean": 0.3333333333333333,
+      "std": 0.4714045207910317,
+      "n": 3
+    },
+    "secondary": {
+      "collision_rate": {
+        "value": 1.0,
+        "mean": 1.0,
+        "std": 0.0,
+        "direction": "minimize"
+      },
+      "timeout_rate": {
+        "value": 0.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "direction": "minimize"
+      },
+      "avg_episode_length": {
+        "value": 63.0,
+        "mean": 63.0,
+        "std": 14.165686240583852,
+        "direction": "minimize"
+      }
+    },
+    "hard_constraints": {
+      "collision_rate": {
+        "value": 1.0,
+        "max": 0.05,
+        "passed": false
+      },
+      "out_of_bounds_rate": {
+        "value": 0.0,
+        "max": 0.01,
+        "passed": true
+      },
+      "action_violation_rate": {
+        "value": 0.0,
+        "max": 0.0,
+        "passed": true
+      }
+    }
+  },
+  "per_seed_metrics": [
+    {
+      "seed": 0,
+      "success": false,
+      "collision": true,
+      "out_of_bounds": false,
+      "timeout": false,
+      "success_rate": 0.0,
+      "collision_rate": 1.0,
+      "out_of_bounds_rate": 0.0,
+      "timeout_rate": 0.0,
+      "episode_length": 43,
+      "action_violation_rate": 0.0,
+      "ring_passed_count": 1,
+      "communication_drop_events": 17
+    },
+    {
+      "seed": 1,
+      "success": false,
+      "collision": true,
+      "out_of_bounds": false,
+      "timeout": false,
+      "success_rate": 0.0,
+      "collision_rate": 1.0,
+      "out_of_bounds_rate": 0.0,
+      "timeout_rate": 0.0,
+      "episode_length": 72,
+      "action_violation_rate": 0.0,
+      "ring_passed_count": 2,
+      "communication_drop_events": 30
+    },
+    {
+      "seed": 2,
+      "success": true,
+      "collision": true,
+      "out_of_bounds": false,
+      "timeout": false,
+      "success_rate": 1.0,
+      "collision_rate": 1.0,
+      "out_of_bounds_rate": 0.0,
+      "timeout_rate": 0.0,
+      "episode_length": 74,
+      "action_violation_rate": 0.0,
+      "ring_passed_count": 3,
+      "communication_drop_events": 30
+    }
+  ],
+  "failure_episodes": [
+    0,
+    1,
+    2
+  ],
+  "wall_time_seconds": 0.018477600067853928,
+  "render": false,
+  "stress_test": null
+}

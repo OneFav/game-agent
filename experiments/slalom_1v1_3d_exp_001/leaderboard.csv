@@ -1,0 +1,14 @@
+rank,trial_id,round,feasible,decision,team_score,blue_team_score,red_win_rate,collision_rate,out_of_bounds_rate,action_violation_rate,avg_episode_length,gate_pass_balance
+1,trial_0007,round1,True,promote,1.0,0.0,1.0,0.0,0.0,0.0,40.0,1.0
+2,trial_0008,round1,True,promote,1.0,0.0,1.0,0.0,0.0,0.0,40.0,1.0
+3,trial_0009,round1,True,promote,1.0,0.0,1.0,0.0,0.0,0.0,40.0,1.0
+4,trial_0011,round2,True,promote,1.0,0.0,1.0,0.0,0.0,0.0,40.0,1.0
+5,trial_0013,round2,True,promote,1.0,0.0,1.0,0.0,0.0,0.0,40.0,1.0
+6,trial_0004,round1,True,promote,1.0,0.0,1.0,0.0,0.0,0.0,43.0,1.0
+7,trial_0005,round1,True,promote,1.0,0.0,1.0,0.0,0.0,0.0,43.0,1.0
+8,trial_0010,round2,True,promote,1.0,0.0,1.0,0.0,0.0,0.0,43.0,1.0
+9,trial_0012,round2,True,promote,1.0,0.0,1.0,0.0,0.0,0.0,43.0,1.0
+10,trial_0001,round1,True,promote,1.0,0.0,1.0,0.0,0.0,0.0,45.0,1.0
+11,trial_0003,round1,True,continue,0.0,1.0,0.0,0.0,0.0,0.0,41.0,-1.0
+12,trial_0006,round1,True,continue,0.0,1.0,0.0,0.0,0.0,0.0,41.0,-1.0
+13,trial_0002,round1,True,continue,0.0,1.0,0.0,0.0,0.0,0.0,44.0,-1.0

@@ -2,7 +2,9 @@
 
 import argparse
 import inspect
+import importlib
 import importlib.util
+import json
 import sys
 from pathlib import Path
 from typing import Any
@@ -17,6 +19,7 @@ REQUIRED_FILES = (
     "search_space.yaml",
     "algorithm_card.md",
     "requirements.txt",
+    "metadata.json",
     "manifest.json",
 )
 
@@ -68,6 +71,8 @@ def validate_policy(policy_dir: Path) -> list[str]:
     schema = _get_config_schema(policy, errors)
     search_space = _read_yaml_mapping(policy_dir / "search_space.yaml", errors)
     _validate_search_space_schema(search_space, schema, errors)
+    metadata = _read_json_mapping(policy_dir / "metadata.json", errors)
+    _validate_policy_metadata(metadata, errors)
     return errors
 
 
@@ -109,18 +114,16 @@ def _validate_policy_protocol(PolicyClass: type, contract: type, errors: list[st
 
 
 def _load_real_contract_policy(errors: list[str]) -> type | None:
-    contract_path = Path(__file__).resolve().parents[1] / "contracts" / "policy_protocol.py"
+    source_root = Path(__file__).resolve().parents[1]
+    old_sys_path = list(sys.path)
     try:
-        spec = importlib.util.spec_from_file_location("contracts.policy_protocol", contract_path)
-        if spec is None or spec.loader is None:
-            errors.append(f"cannot load real policy contract: {contract_path}")
-            return None
-        module = importlib.util.module_from_spec(spec)
-        sys.modules["contracts.policy_protocol"] = module
-        spec.loader.exec_module(module)
+        sys.path = [str(source_root), *old_sys_path]
+        module = importlib.import_module("contracts.policy_protocol")
     except Exception as error:
         errors.append(f"cannot import real policy contract: {error}")
         return None
+    finally:
+        sys.path = old_sys_path
 
     Policy = getattr(module, "Policy", None)
     if not isinstance(Policy, type):
@@ -174,6 +177,18 @@ def _read_yaml_mapping(path: Path, errors: list[str]) -> dict[str, Any]:
     return data
 
 
+def _read_json_mapping(path: Path, errors: list[str]) -> dict[str, Any]:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as error:
+        errors.append(f"cannot parse {path.name}: {error}")
+        return {}
+    if not isinstance(data, dict):
+        errors.append(f"{path.name} root must be a mapping")
+        return {}
+    return data
+
+
 def _validate_search_space_schema(search_space: dict[str, Any], schema: dict[str, Any], errors: list[str]) -> None:
     parameters = search_space.get("parameters")
     if not isinstance(parameters, dict):
@@ -183,6 +198,52 @@ def _validate_search_space_schema(search_space: dict[str, Any], schema: dict[str
     missing = [name for name in parameters if name not in schema]
     if missing:
         errors.append(f"search_space parameters missing from get_config_schema(): {', '.join(sorted(missing))}")
+
+
+def _validate_policy_metadata(metadata: dict[str, Any], errors: list[str]) -> None:
+    method = metadata.get("method")
+    hypothesis = metadata.get("method_hypothesis")
+    boundaries = metadata.get("immutable_boundaries")
+    checkpoint_binding = metadata.get("checkpoint_binding")
+    if not isinstance(method, dict):
+        errors.append("metadata.method must be a mapping")
+    else:
+        for field in ("family", "name", "learning_paradigm", "execution_mode"):
+            if not isinstance(method.get(field), str) or not method[field].strip():
+                errors.append(f"metadata.method.{field} must be a non-empty string")
+        for field in ("trained_parties", "frozen_parties"):
+            if not isinstance(method.get(field), list):
+                errors.append(f"metadata.method.{field} must be a list")
+
+    if not isinstance(hypothesis, dict):
+        errors.append("metadata.method_hypothesis must be a mapping")
+    else:
+        if not isinstance(hypothesis.get("statement"), str) or not hypothesis["statement"].strip():
+            errors.append("metadata.method_hypothesis.statement must be a non-empty string")
+        guidance = hypothesis.get("optimization_guidance")
+        if not isinstance(guidance, list) or not guidance:
+            errors.append("metadata.method_hypothesis.optimization_guidance must be a non-empty list")
+
+    if not isinstance(boundaries, dict):
+        errors.append("metadata.immutable_boundaries must be a mapping")
+        return
+    if boundaries.get("evaluation_source") != "scenario.evaluation_metrics":
+        errors.append(
+            "metadata.immutable_boundaries.evaluation_source must be "
+            "'scenario.evaluation_metrics'"
+        )
+    for field in ("method_invariants", "forbidden_changes"):
+        value = boundaries.get(field)
+        if not isinstance(value, list) or not value:
+            errors.append(f"metadata.immutable_boundaries.{field} must be a non-empty list")
+
+    if not isinstance(checkpoint_binding, dict):
+        errors.append("metadata.checkpoint_binding must be a mapping")
+        return
+    for field in ("method", "observation_contract", "action_contract", "preprocessing"):
+        value = checkpoint_binding.get(field)
+        if not isinstance(value, str) or not value.strip():
+            errors.append(f"metadata.checkpoint_binding.{field} must be a non-empty string")
 
 
 if __name__ == "__main__":

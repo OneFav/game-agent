@@ -1,0 +1,14 @@
+{
+  "checkpoint_hash": "sha256:00857994c84d0bfffc47a130c7fdd7057deceaed20c2303623c0cf35a7198d0c",
+  "checkpoint_path": "trials/trial_0001/checkpoint_final.pt",
+  "policy_id": "drone_ring_delay_2_ppo_v1",
+  "scenario_id": "drone_ring_delay_2_001",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "training_executed": true,
+  "trial_id": "trial_0001",
+  "wall_time_seconds": 7.107941700000083
+}

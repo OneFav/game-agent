@@ -1,0 +1,51 @@
+task_id: slalom_1v1_3d_001
+task_family: drone_ring_game
+engine: swarm_combat
+semantic_task_family: swarm_combat
+formalism: MarkovGame
+max_steps: 400
+dt: 0.05
+gate_layout: slalom
+gate_count: 5
+communication:
+  mode: perfect
+teams:
+  red:
+    count: 1
+    racers: 1
+  blue:
+    count: 1
+    racers: 1
+dynamics:
+  model: DoubleIntegrator3D
+  racer_max_speed: 7.5
+  racer_max_accel: 9.0
+field:
+  x_range: [-25.0, 25.0]
+  y_range: [-25.0, 25.0]
+  z_range: [0.5, 15.0]
+reward_weights:
+  gate_pass: 1.0
+  formation_tight: 0.0
+  interception: 0.35
+  protection: 0.0
+  safety_violation: -0.2
+  collision: -1.0
+  out_of_bounds: -1.0
+  time_penalty: -0.01
+drone:
+  safety_radius: 0.45
+  inter_team_safe_dist: 0.85
+  intra_team_safe_dist: 0.6
+rules:
+  target_score: 1.0
+  collision_ends_episode: true
+  out_of_bounds_ends_episode: true
+spawn_red:
+  mode: fixed
+  fixed_positions:
+    - [-22.0, -1.5, 4.0]
+spawn_blue:
+  mode: fixed
+  fixed_positions:
+    - [22.0, 1.5, 4.0]

@@ -1,51 +1,79 @@
 parameters:
-  racer_gain:
+  desired_speed:
     type: number
-    min: 0.75
-    max: 1.0
-    default: 0.92
+    values: [4.0, 4.5, 5.0]
+    default: 5.0
     priority: priority_1
-  intercept_gain:
+  risk_margin:
     type: number
-    min: 0.75
-    max: 1.0
-    default: 0.95
+    values: [0.75, 0.9, 1.05]
+    default: 0.9
     priority: priority_1
-  escort_gain:
+  position_gain:
     type: number
-    min: 0.55
-    max: 0.9
-    default: 0.72
+    min: 0.5
+    max: 2.0
+    default: 1.2
     priority: priority_2
-  block_gain:
+  velocity_gain:
     type: number
-    min: 0.4
-    max: 0.8
-    default: 0.62
+    min: 1.0
+    max: 3.5
+    default: 2.2
     priority: priority_2
-  avoidance_radius:
+  boundary_margin:
     type: number
-    min: 1.5
-    max: 4.0
-    default: 2.5
+    min: 0.8
+    max: 2.0
+    default: 1.2
     priority: priority_2
-  avoidance_gain:
-    type: number
-    min: 0.2
-    max: 0.8
-    default: 0.45
+  turn_steps:
+    type: integer
+    min: 6
+    max: 24
+    default: 12
     priority: priority_2
-  velocity_damping:
+  turn_lookahead:
     type: number
-    min: 0.0
-    max: 0.25
-    default: 0.10
+    min: 3.0
+    max: 8.0
+    default: 5.0
     priority: priority_2
-  prediction_horizon:
+  risk_lookahead_steps:
+    type: integer
+    min: 10
+    max: 32
+    default: 18
+    priority: priority_2
+  brake_release_speed:
     type: number
-    min: 0.0
+    min: 0.1
     max: 0.8
     default: 0.35
+    priority: priority_2
+  lane_spacing:
+    type: number
+    min: 0.6
+    max: 2.0
+    default: 1.2
+    priority: priority_2
+  gate_approach_offset:
+    type: number
+    min: 2.0
+    max: 6.0
+    default: 4.0
+    priority: priority_2
+  gate_exit_offset:
+    type: number
+    min: 2.0
+    max: 6.0
+    default: 3.0
+    priority: priority_2
+  separation_gain:
+    type: number
+    min: 2.0
+    max: 6.0
+    default: 4.0
     priority: priority_2
   reserved_action_value:
     type: number
@@ -53,5 +81,5 @@ parameters:
     default: 0.0
     priority: do_not_tune
 budget:
-  max_trials: 24
+  max_trials: 9
   seeds_per_trial: 3

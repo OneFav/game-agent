@@ -9,7 +9,7 @@
     "tests/test_obs_action_shape.py",
     "tests/test_reset_deterministic.py"
   ],
-  "freeze_hash": "f531c82922afc4a56a0e55e31ba66e204f9d53cd6e4e4c7423c382263e0bf76f",
+  "freeze_hash": "d8b2d81764da09fd12644eef41d2430d10cff705452a1eac0996ddbac176854b",
   "package_id": "drone_ring_001",
   "package_type": "scenario",
   "schema_version": "1.0"

@@ -1,0 +1,25 @@
+{
+  "created_at": "2026-06-28T15:10:20+00:00",
+  "files": [
+    "algorithm_card.md",
+    "default_config.yaml",
+    "infer.py",
+    "metadata.json",
+    "policy.py",
+    "requirements.txt",
+    "search_space.yaml",
+    "tests/test_action_bounds.py",
+    "tests/test_deterministic.py",
+    "tests/test_no_side_effects.py",
+    "tests/test_policy_class.py",
+    "train.py"
+  ],
+  "freeze_hash": "8b6abee20c9b15157ed033e9b16ca6fcc060fa7d25c19425d72dbc3536b997dd",
+  "package_id": "figure_eight_4v4_rule_v1",
+  "package_type": "policy",
+  "schema_version": "1.0",
+  "training_estimate": {
+    "expected_seconds": 1,
+    "kind": "rule_based"
+  }
+}

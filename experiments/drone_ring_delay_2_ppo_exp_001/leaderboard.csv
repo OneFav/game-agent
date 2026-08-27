@@ -1,0 +1,5 @@
+rank,trial_id,success_rate,collision_rate,out_of_bounds_rate,avg_episode_length,action_violation_rate
+1,trial_0003,1.0,0.0,0.0,28.0,0.0
+2,trial_0001,1.0,0.0,0.0,30.0,0.0
+3,trial_0002,1.0,0.0,0.0,34.0,0.0
+4,trial_0004,1.0,0.0,0.0,47.0,0.0

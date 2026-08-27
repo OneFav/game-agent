@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light" />
+    <title>AutoGame 实验工作台</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./workbench.css" />
+  </head>
+  <body>
+    <div class="workbench-shell">
+      <aside class="project-sidebar" aria-label="项目历史">
+        <div class="sidebar-head">
+          <a class="wordmark" href="/" aria-label="AutoGame 首页">AutoGame</a>
+          <button id="newProjectButton" class="new-project-button" type="button">
+            <span aria-hidden="true">＋</span> 新建项目
+          </button>
+        </div>
+
+        <div class="history-heading">
+          <span>历史项目</span>
+          <span id="projectCount" class="history-count">0</span>
+        </div>
+
+        <label class="project-search">
+          <span class="sr-only">搜索历史项目</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.3-4.3m2.3-5.2a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" /></svg>
+          <input id="scenarioFilter" type="search" placeholder="搜索项目" />
+        </label>
+
+        <div class="suite-group-row">
+          <span class="suite-folder" aria-hidden="true"></span>
+          <span>50 场景</span>
+          <span id="suiteProjectCount" class="suite-count">50</span>
+        </div>
+
+        <select id="scenarioSelect" class="sr-only" aria-label="项目选择"></select>
+        <div id="scenarioList" class="project-list" aria-live="polite"></div>
+
+        <div class="sidebar-footer">
+          <button class="sidebar-icon-button" type="button" aria-label="搜索" title="搜索">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.3-4.3m2.3-5.2a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" /></svg>
+          </button>
+          <button class="sidebar-icon-button" type="button" aria-label="归档" title="归档">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16v12H4zM3 4h18v4H3zm6 8h6" /></svg>
+          </button>
+        </div>
+      </aside>
+
+      <main class="project-workspace">
+        <header class="project-header">
+          <div class="project-title-row">
+            <div>
+              <h1 id="projectTitle">正在载入项目</h1>
+              <div id="scenarioStatus" class="sr-only">--</div>
+            </div>
+            <div id="connectionStatus" class="run-status" data-tone="warn">
+              <span class="run-status-dot" aria-hidden="true"></span>
+              <span id="connectionStatusText">连接实验数据</span>
+            </div>
+          </div>
+          <div id="workflowSteps" class="workflow-steps" aria-label="项目流程"></div>
+        </header>
+
+        <section class="evidence-workspace" aria-label="实验内容与结果">
+          <article class="replay-card">
+            <header class="card-header replay-card-header">
+              <div>
+                <h2>同步回放</h2>
+                <span id="canvasTitle" class="card-caption">--</span>
+              </div>
+              <div class="replay-identity" role="group" aria-label="回放身份">
+                <button id="baselineRoleButton" type="button" data-role="baseline">Baseline</button>
+                <button id="candidateRoleButton" type="button" data-role="candidate" data-active="true">Candidate</button>
+              </div>
+            </header>
+
+            <div class="replay-viewport">
+              <canvas id="sceneCanvas" aria-label="实验空间回放" role="img"></canvas>
+              <div id="emptyProjectPanel" class="empty-project-panel" hidden>
+                <strong>尚无实验产物</strong>
+                <span>项目已创建，流程将从目标开始。</span>
+              </div>
+              <div class="replay-hud">
+                <span id="canvasSubtitle">等待实验帧</span>
+                <span id="frameStatus">0 / 0</span>
+              </div>
+            </div>
+
+            <div class="playback-bar">
+              <div class="playback-buttons">
+                <button id="stepBackButton" type="button" aria-label="上一帧">‹</button>
+                <button id="playButton" class="play-button" type="button" aria-label="播放" aria-pressed="false">▶</button>
+                <button id="stepForwardButton" type="button" aria-label="下一帧">›</button>
+              </div>
+              <div class="timeline-track">
+                <input id="frameSlider" type="range" min="0" max="0" value="0" aria-label="回放时间轴" />
+                <div class="timeline-labels">
+                  <span id="timelineStart">0</span>
+                  <span id="timelineMid">0</span>
+                  <span id="timelineEnd">0</span>
+                </div>
+              </div>
+              <div class="playback-meta">
+                <button id="slowerButton" type="button" aria-label="减速">−</button>
+                <span id="speedValue">1.0x</span>
+                <button id="fasterButton" type="button" aria-label="加速">＋</button>
+              </div>
+            </div>
+          </article>
+
+          <aside class="result-column">
+            <article class="metric-chart-card">
+              <header class="card-header">
+                <div>
+                  <h2 id="chartTitle">主要指标</h2>
+                  <span id="primaryMetricLabel" class="card-caption">--</span>
+                </div>
+                <div class="chart-legend" aria-hidden="true">
+                  <span><i class="legend-line baseline"></i>Baseline</span>
+                  <span><i class="legend-line candidate"></i>Candidate</span>
+                </div>
+              </header>
+              <div class="chart-shell">
+                <canvas id="metricChart" aria-label="Baseline 与 Candidate 指标曲线"></canvas>
+              </div>
+              <div class="comparison-strip">
+                <div><span>Baseline</span><strong id="baselineValue">--</strong></div>
+                <div><span>Candidate</span><strong id="candidateValue">--</strong></div>
+                <div><span>Delta</span><strong id="deltaValue">--</strong></div>
+              </div>
+            </article>
+
+            <article id="constraintCard" class="constraint-card" data-tone="neutral">
+              <header class="card-header">
+                <div>
+                  <h2>约束证据</h2>
+                  <span id="constraintSummary" class="constraint-summary">检查中</span>
+                </div>
+                <button id="jumpEvidenceButton" class="text-button" type="button">跳转证据帧</button>
+              </header>
+              <div id="constraintEvidence" class="constraint-evidence"></div>
+              <div class="decision-row">
+                <span>Promotion</span>
+                <strong id="promotionValue">--</strong>
+              </div>
+            </article>
+          </aside>
+        </section>
+
+        <section class="interaction-panel" aria-label="人机交互区">
+          <div class="interaction-topline">
+            <div class="method-readout">
+              <span>当前采用</span>
+              <strong id="currentMethod">--</strong>
+            </div>
+            <div class="intervention-actions">
+              <button type="button" data-intervention="change_method">修改方法</button>
+              <button type="button" data-intervention="adjust_budget">调整预算</button>
+              <button id="pauseProjectButton" type="button" data-intervention="pause">暂停</button>
+              <button class="danger-action" type="button" data-intervention="stop">停止</button>
+            </div>
+          </div>
+          <form id="agentMessageForm" class="agent-composer">
+            <label class="sr-only" for="agentMessageInput">告诉 Agent 要改变什么</label>
+            <input id="agentMessageInput" type="text" maxlength="2000" placeholder="告诉 Agent 要改变什么…" autocomplete="off" />
+            <button type="submit" aria-label="发送">➤</button>
+          </form>
+          <div id="actionFeedback" class="action-feedback" aria-live="polite"></div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="newProjectDialog" class="new-project-dialog">
+      <form id="newProjectForm" method="dialog">
+        <div class="dialog-head">
+          <h2>新建项目</h2>
+          <button id="closeProjectDialog" type="button" aria-label="关闭">×</button>
+        </div>
+        <label>
+          <span>项目名称</span>
+          <input id="newProjectTitle" name="title" maxlength="120" required placeholder="例如：通信延迟策略实验" />
+        </label>
+        <label>
+          <span>目标</span>
+          <textarea id="newProjectGoal" name="goal" maxlength="4000" required placeholder="描述希望 Agent 完成的实验目标"></textarea>
+        </label>
+        <div id="newProjectError" class="dialog-error" role="alert" aria-live="assertive"></div>
+        <div class="dialog-actions">
+          <button id="cancelProjectDialog" type="button">取消</button>
+          <button id="newProjectSubmit" class="primary-action" type="submit">开始</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="support-data" aria-hidden="true">
+      <select id="roleSelect"></select>
+      <select id="seedSelect"></select>
+      <select id="projectionSelect"><option value="2d">2D</option><option value="3d">3D</option></select>
+      <button id="reloadButton" type="button">Reload</button>
+      <span id="agentCount">0</span><span id="eventCount">0</span><span id="dimensionLabel">--</span>
+      <span id="liveFrameValue">--</span><span id="liveFrameCaption">--</span>
+      <div id="layerToggles"></div><div id="metricsGrid"></div><div id="eventList"></div>
+      <div id="disclosureList"></div><div id="rawWarnings"></div><pre id="rawData"></pre>
+    </div>
+
+    <div id="announcement" class="sr-only" aria-live="polite"></div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

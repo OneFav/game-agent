@@ -1,0 +1,63 @@
+schema_version: scenario_suite/v1
+suite_id: max_space_50_v1
+description: 最大场景空间 50 个独立代表性任务的协议一致性与参考策略评估套件
+catalog: max_space_50_v1
+task_document: ../../1.md
+policy_resolution:
+  baseline_policy_id: max_space_zero_v1
+  candidate_policy_id_template: max_space_s{index}_rule_v1
+seeds: [0, 1, 2]
+budget:
+  max_steps: 48
+  replay_interval: 4
+scenarios:
+  - S01
+  - S02
+  - S03
+  - S04
+  - S05
+  - S06
+  - S07
+  - S08
+  - S09
+  - S10
+  - S11
+  - S12
+  - S13
+  - S14
+  - S15
+  - S16
+  - S17
+  - S18
+  - S19
+  - S20
+  - S21
+  - S22
+  - S23
+  - S24
+  - S25
+  - S26
+  - S27
+  - S28
+  - S29
+  - S30
+  - S31
+  - S32
+  - S33
+  - S34
+  - S35
+  - S36
+  - S37
+  - S38
+  - S39
+  - S40
+  - S41
+  - S42
+  - S43
+  - S44
+  - S45
+  - S46
+  - S47
+  - S48
+  - S49
+  - S50

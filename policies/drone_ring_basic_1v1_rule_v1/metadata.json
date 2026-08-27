@@ -1,0 +1,9 @@
+{
+  "formalism": "POSG",
+  "policy_id": "drone_ring_basic_1v1_rule_v1",
+  "policy_type": "rule_ring_navigation",
+  "scenario_dir": "scenarios/drone_ring_basic_1v1_001",
+  "schema_version": "1.0",
+  "task_family": "drone_ring_game",
+  "task_id": "drone_ring_basic_1v1_001"
+}

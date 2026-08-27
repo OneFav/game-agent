@@ -1,0 +1,21 @@
+{
+  "created_at": "2026-08-27T03:56:37+00:00",
+  "files": [
+    "algorithm_card.md",
+    "default_config.yaml",
+    "infer.py",
+    "metadata.json",
+    "policy.py",
+    "requirements.txt",
+    "search_space.yaml",
+    "tests/test_action_bounds.py",
+    "tests/test_inference_latency.py",
+    "tests/test_policy_interface.py",
+    "tests/test_smoke_rollout.py",
+    "train.py"
+  ],
+  "freeze_hash": "c72d07ac3e976e66d2f92f77e965181660392d638616793405bc0aa162f0730a",
+  "package_id": "drone_ring_basic_1v1_rule_v2",
+  "package_type": "policy",
+  "schema_version": "1.0"
+}

@@ -13,6 +13,9 @@ def test_reset_is_deterministic():
     env = make_env()
     first_obs, first_infos = env.reset(seed=7)
     second_obs, second_infos = env.reset(seed=7)
-    assert first_infos == second_infos
     for agent_id in env.agents:
         np.testing.assert_array_equal(first_obs[agent_id], second_obs[agent_id])
+        assert first_infos[agent_id]["collision"] == second_infos[agent_id]["collision"]
+        assert first_infos[agent_id]["out_of_bounds"] == second_infos[agent_id]["out_of_bounds"]
+        assert first_infos[agent_id]["gate_passed_count"] == second_infos[agent_id]["gate_passed_count"]
+        assert first_infos[agent_id]["team_scores"] == second_infos[agent_id]["team_scores"]

@@ -230,4 +230,3 @@ class EnvConfig:
         _apply_team_spawn_defaults(self.spawn_red, "red")
         _apply_team_spawn_defaults(self.spawn_blue, "blue")
         return self
-

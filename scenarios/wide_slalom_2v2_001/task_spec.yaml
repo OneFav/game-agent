@@ -1,12 +1,12 @@
 schema_version: "1.0"
 task_id: wide_slalom_2v2_001
-task_family: drone_ring_game
+task_family: swarm_combat
 formalism: POSG
 agents:
   - id: red_racer_0
     team: red
     role: racer
-    objective: pass_wide_slalom_gates
+    objective: score_wide_slalom_gates
   - id: red_defender_0
     team: red
     role: defender
@@ -15,7 +15,7 @@ agents:
   - id: blue_racer_0
     team: blue
     role: racer
-    objective: contest_route_progress
+    objective: contest_gate_progress
   - id: blue_defender_0
     team: blue
     role: defender
@@ -27,91 +27,90 @@ scenario_parameters:
   gate_layout: wide_slalom
   gate_count: 6
   max_steps: 600
-  m1_runtime_compromise: "2v2 role semantics are frozen in spec/config; env API keeps current drone_ring_game-compatible obs/action shapes."
+  gate_pass_reward: 1.0
+  scoring_team: red
 observation_space:
   type: Box
-  shape: [32]
+  shape: [78]
   dtype: float32
-  low: [-25.0, -25.0, -8.0, -8.0, -50.0, -50.0, -8.0, -8.0, -50.0, -50.0, -8.0, -8.0, -50.0, -50.0, -8.0, -8.0, 0.0, -1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -50.0, -50.0, -8.0, -8.0, 0.0, 0.0, 0.0, 0.0]
-  high: [25.0, 25.0, 8.0, 8.0, 50.0, 50.0, 8.0, 8.0, 50.0, 50.0, 8.0, 8.0, 50.0, 50.0, 8.0, 8.0, 1.0, 1.0, 1.0, 80.0, 1.0, 1.0, 1.0, 1.0, 50.0, 50.0, 8.0, 8.0, 6.0, 1.0, 0.0, 0.0]
-  partial_observability: true
-  description: "[0:2] self position; [2:4] self velocity; [4:8] teammate relative position/velocity; [8:16] two opponent relative position/velocity blocks; [16] remaining gate ratio; [17:19] next gate direction; [19] next gate distance; [20:24] team/role one-hot; [24:26] next gate vector; [26:30] nearest opponent relative position/velocity; [30] next gate index; [31] normalized step."
+  partial_observability: false
+  description: "Per-agent 3D swarm observation: self state (6), three other-drone relative blocks (3 x 8), and six gate blocks (6 x 8)."
 action_space:
   type: Box
   shape: [4]
   dtype: float32
   low: [-1.0, -1.0, -1.0, -1.0]
   high: [1.0, 1.0, 1.0, 1.0]
-  semantics: velocity_setpoint
-  description: "[0] vx command; [1] vy command; [2:4] reserved by current drone_ring_game-compatible M1 policy interface."
+  semantics: normalized_acceleration_setpoint
+  description: "[0:3] normalized XYZ acceleration command; [3] reserved by the local policy interface."
 reward_structure:
   shaping: dense
   components:
-    - name: gate_progress
+    - name: gate_progress_reward
       weight: 1.0
-      description: Red racer receives progress reward for passing gates in order.
-    - name: escort_spacing
-      weight: 0.2
-      description: Red defender is rewarded for maintaining escort distance near the red racer.
-    - name: interception_pressure
-      weight: 0.5
-      description: Blue defender is rewarded for closing distance to the red racer without safety violations.
+      description: Team scores one point when a valid gate pass is recorded.
+    - name: formation_tightness_reward
+      weight: 5.0
+      description: Escort formations are rewarded for maintaining support spacing.
+    - name: interception_reward
+      weight: 2.0
+      description: Defenders are rewarded for closing interception lanes.
+    - name: protection_reward
+      weight: 1.0
+      description: Escort defenders are rewarded for shielding their racer.
+    - name: safety_violation_penalty
+      weight: -0.5
+      description: Near-miss and shielding violations receive a penalty.
     - name: collision_penalty
-      weight: -10.0
-      description: Any collision receives a penalty.
-    - name: boundary_penalty
-      weight: -5.0
-      description: Any out-of-bounds event receives a penalty.
+      weight: -100.0
+      description: Collisions heavily penalize the whole team.
+    - name: out_of_bounds_penalty
+      weight: -100.0
+      description: Leaving the field heavily penalizes the whole team.
     - name: time_penalty
       weight: -0.01
-      description: Small step cost encourages efficient completion.
+      description: Small per-step cost encourages efficient trajectories.
 evaluation_metrics:
   primary:
-    name: success_rate
+    name: team_score
     direction: maximize
-    promotion_threshold: 0.75
-    description: Fraction of episodes where red_racer_0 passes all wide_slalom gates without hard-constraint failure.
+    promotion_threshold: 2.0
+    description: "Average cumulative red-team gate score across evaluation seeds."
   secondary:
+    - name: avg_red_score
+      direction: maximize
+    - name: avg_blue_score
+      direction: maximize
     - name: avg_episode_length
       direction: minimize
-    - name: red_gate_pass_count
+    - name: red_win_rate
       direction: maximize
-    - name: blue_interception_count
-      direction: maximize
-    - name: escort_distance_error
-      direction: minimize
-    - name: control_smoothness
+    - name: draw_rate
       direction: minimize
   hard_constraints:
     - name: collision_rate
       direction: minimize
       max: 0.05
-      description: Maximum fraction of episodes with any collision.
+      description: Fraction of episodes with any collision or safety-triggered double loss.
     - name: out_of_bounds_rate
       direction: minimize
       max: 0.01
-      description: Maximum fraction of episodes with any drone leaving the field.
+      description: Fraction of episodes with any out-of-bounds termination.
     - name: action_violation_rate
       direction: minimize
       max: 0.0
-      description: Actions must be clipped by the scenario safety interface before application.
+      description: Submitted actions must respect the normalized action bounds.
 termination_conditions:
-  - type: all_gates_passed
-    agent: red_racer_0
-    description: Red racer passes all six wide_slalom gates in sequence.
-  - type: interception
-    agent: blue_defender_0
-    description: Blue defender reaches the red racer within the interception radius.
   - type: collision_any
-    description: Any pair of drones violates the collision radius.
+    description: Any collision or hard safety violation ends the episode in double loss.
   - type: out_of_bounds
-    description: Any drone leaves the configured square field.
+    description: Any drone leaving the field ends the episode.
   - type: timeout
     steps: 600
-    description: Episode truncates at 600 environment steps.
+    description: Episode truncates at 600 environment steps if no hard termination occurs.
 splits:
   train_seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   val_seeds: [100, 101, 102]
   hidden_test:
     path: evaluator/hidden_tests.py
-    description: Held-out seeds and perturbations reserved for downstream evaluation.
+    description: Held-out perturbations reserved for downstream evaluation.

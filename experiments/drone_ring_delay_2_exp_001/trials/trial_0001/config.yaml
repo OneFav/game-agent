@@ -1,0 +1,6 @@
+policy_type: rule_ring_navigation
+speed_scale: 0.8
+intercept_gain: 0.8
+safety_margin: 0.1
+delay_steps: 2
+pursuit_brake_distance: 0.35

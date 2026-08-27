@@ -1,0 +1,21 @@
+{
+  "created_at": "2026-08-27T03:56:37+00:00",
+  "files": [
+    "algorithm_card.md",
+    "default_config.yaml",
+    "infer.py",
+    "metadata.json",
+    "policy.py",
+    "requirements.txt",
+    "search_space.yaml",
+    "tests/test_action_bounds.py",
+    "tests/test_inference_latency.py",
+    "tests/test_policy_interface.py",
+    "tests/test_smoke_rollout.py",
+    "train.py"
+  ],
+  "freeze_hash": "8fec9624c9fb4f6fe1127493fed2ada58791d5d13cdd31eb90799762f644413e",
+  "package_id": "drone_ring_delay_2_rule_v1",
+  "package_type": "policy",
+  "schema_version": "1.0"
+}

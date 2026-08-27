@@ -1,0 +1,8 @@
+strategy: dynamics_pd
+policy_id: max_space_s06_rule_v1
+gain: 1.0
+damping: 0.0
+action_cap: 1.0
+rate_limit: 2.0
+communication_decay: 0.0
+role_gain: 0.0

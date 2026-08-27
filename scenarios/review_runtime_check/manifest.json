@@ -9,7 +9,7 @@
     "tests/test_obs_action_shape.py",
     "tests/test_reset_deterministic.py"
   ],
-  "freeze_hash": "2d1a1e796f47328de0e1d77b8d704553be0b3896fa38235a8601454aef2baa38",
+  "freeze_hash": "37b610fcce0f8111246ab9633eea2f794830fd669542323e8afd4f4552dcb49d",
   "package_id": "review_runtime_check",
   "package_type": "scenario",
   "schema_version": "1.0"

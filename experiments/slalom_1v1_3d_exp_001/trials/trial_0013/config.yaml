@@ -1,0 +1,7 @@
+racer_gain: 0.92
+intercept_gain: 0.6
+avoidance_gain: 0.62
+boundary_gain: 0.58
+prediction_horizon: 0.55
+velocity_damping: 0.18
+brake_bias: 0.25

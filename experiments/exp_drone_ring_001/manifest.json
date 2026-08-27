@@ -59,7 +59,7 @@
     "trials/trial_0018/log.json",
     "trials/trial_0018/metrics.json"
   ],
-  "freeze_hash": "747984b2450fa8ab867329bef9fdc47bda9504606ee3ac3fd4cdb4676d0ff1cb",
+  "freeze_hash": "c13d262b368ba5ba85a6cd821154b400b65bb4449a94e35f95f1bd03415fae59",
   "package_id": "exp_drone_ring_001",
   "package_type": "experiment",
   "schema_version": "1.0"

@@ -1,0 +1,17 @@
+{
+  "created_at": "2026-06-28T14:58:32+00:00",
+  "files": [
+    "assumptions.md",
+    "env.py",
+    "env_config.yaml",
+    "model.md",
+    "task_spec.yaml",
+    "tests/test_lossy_info.py",
+    "tests/test_obs_action_shape.py",
+    "tests/test_reset_deterministic.py"
+  ],
+  "freeze_hash": "b15c16ae211daa319ec24cf60961b1ac4e5ec27aeedbb2b3062976b51f268f1a",
+  "package_id": "drone_ring_lossy_3ring_001",
+  "package_type": "scenario",
+  "schema_version": "1.0"
+}

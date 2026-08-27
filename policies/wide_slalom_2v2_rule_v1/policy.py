@@ -21,7 +21,12 @@ def _add_src_to_path() -> None:
 _add_src_to_path()
 
 from contracts.policy_protocol import Policy
+from game_agent.envs.swarm_combat.entities import Role
+from game_agent.policy_designer.reference_policies.safe_rule_policy import SafeRulePolicy
 
+
+AGENT_ORDER = ["red_racer_0", "red_defender_0", "blue_racer_0", "blue_defender_0"]
+AGENT_TO_ID = {name: index for index, name in enumerate(AGENT_ORDER)}
 
 DEFAULT_ENV_SPEC: dict[str, Any] = {
     "action_space": {
@@ -33,53 +38,79 @@ DEFAULT_ENV_SPEC: dict[str, Any] = {
 }
 
 
-DEFAULT_CONFIG: dict[str, float] = {
-    "racer_gain": 0.92,
-    "escort_gain": 0.72,
-    "intercept_gain": 0.95,
-    "block_gain": 0.62,
-    "avoidance_radius": 2.5,
-    "avoidance_gain": 0.45,
-    "velocity_damping": 0.10,
-    "prediction_horizon": 0.35,
+DEFAULT_CONFIG: dict[str, Any] = {
+    "desired_speed": 4.5,
+    "position_gain": 1.2,
+    "velocity_gain": 2.2,
+    "risk_margin": 0.75,
+    "boundary_margin": 1.2,
+    "turn_steps": 12,
+    "turn_lookahead": 5.0,
+    "risk_lookahead_steps": 18,
+    "brake_release_speed": 0.35,
+    "lane_spacing": 1.2,
+    "gate_approach_offset": 4.0,
+    "gate_exit_offset": 3.0,
+    "separation_gain": 4.0,
     "reserved_action_value": 0.0,
 }
 
 
-class RuleWideSlalom2v2Policy(Policy):
+class TeamAwareSafeRulePolicy(SafeRulePolicy):
+    def _defender_target(self, env, drone) -> np.ndarray:
+        if getattr(drone.team, "name", "") == "BLUE":
+            opponents = [candidate for candidate in env.drones if candidate.team != drone.team and candidate.role == Role.RACER]
+            if opponents:
+                target = min(opponents, key=lambda other: np.linalg.norm(other.position - drone.position))
+                return target.position
+        return super()._defender_target(env, drone)
+
+
+class PolicyClass(Policy):
     def __init__(self, config: dict[str, Any] | None = None, env_spec: dict[str, Any] | None = None) -> None:
         self.config = self._validated_config(config or {})
-        env_spec = env_spec or DEFAULT_ENV_SPEC
-        action_space = env_spec.get("action_space", DEFAULT_ENV_SPEC["action_space"])
+        self.env_spec = env_spec or DEFAULT_ENV_SPEC
+        action_space = self.env_spec.get("action_space", DEFAULT_ENV_SPEC["action_space"])
         self._action_shape = tuple(action_space.get("shape", [4]))
-        self._action_low = np.asarray(action_space.get("low", [-1.0] * 4), dtype=np.float32)
-        self._action_high = np.asarray(action_space.get("high", [1.0] * 4), dtype=np.float32)
+        self._action_low = np.asarray(action_space.get("low", [-1.0, -1.0, -1.0, -1.0]), dtype=np.float32)
+        self._action_high = np.asarray(action_space.get("high", [1.0, 1.0, 1.0, 1.0]), dtype=np.float32)
         if self._action_low.shape != (4,) or self._action_high.shape != (4,):
             self._action_low = np.full((4,), -1.0, dtype=np.float32)
             self._action_high = np.full((4,), 1.0, dtype=np.float32)
+        self._policy = TeamAwareSafeRulePolicy(
+            desired_speed=float(self.config["desired_speed"]),
+            position_gain=float(self.config["position_gain"]),
+            velocity_gain=float(self.config["velocity_gain"]),
+            risk_margin=float(self.config["risk_margin"]),
+            boundary_margin=float(self.config["boundary_margin"]),
+            turn_steps=int(self.config["turn_steps"]),
+            turn_lookahead=float(self.config["turn_lookahead"]),
+            risk_lookahead_steps=int(self.config["risk_lookahead_steps"]),
+            brake_release_speed=float(self.config["brake_release_speed"]),
+            lane_spacing=float(self.config["lane_spacing"]),
+            gate_approach_offset=float(self.config["gate_approach_offset"]),
+            gate_exit_offset=float(self.config["gate_exit_offset"]),
+            separation_gain=float(self.config["separation_gain"]),
+            defender_mode="escort",
+        )
+        self._cached_step: int | None = None
+        self._cached_actions: dict[str, np.ndarray] = {}
         self._seed = 0
         self._checkpoint_path: str | None = None
+        self._needs_env_reset = True
 
     def reset(self, seed: int) -> None:
         self._seed = int(seed)
+        self._cached_step = None
+        self._cached_actions = {}
+        self._needs_env_reset = True
 
     def act(self, obs: dict[str, np.ndarray], agent_id: str, info: dict[str, Any] | None = None) -> np.ndarray:
-        del info
         try:
-            observation = self._extract_observation(obs, agent_id)
-            command = self._role_command(observation, agent_id)
-            action = np.array(
-                [
-                    command[0],
-                    command[1],
-                    self.config["reserved_action_value"],
-                    self.config["reserved_action_value"],
-                ],
-                dtype=np.float32,
-            )
-            shield = np.maximum(np.abs(self._action_high) * 1.2, 1e-6).astype(np.float32)
-            shielded = np.clip(action, -shield, shield)
-            return np.clip(shielded, self._action_low, self._action_high).astype(np.float32)
+            raw_env = info.get("raw_env") if isinstance(info, dict) else None
+            if raw_env is not None:
+                return self._act_from_env(raw_env, agent_id)
+            return self._fallback_action(obs, agent_id)
         except Exception:
             return np.zeros((4,), dtype=np.float32)
 
@@ -93,18 +124,23 @@ class RuleWideSlalom2v2Policy(Policy):
         except Exception:
             return
         if isinstance(data, dict) and isinstance(data.get("config"), dict):
-            self.config = self._validated_config(data["config"])
+            self.__init__(data["config"], self.env_spec)
 
     def get_config_schema(self) -> dict[str, Any]:
         return {
-            "racer_gain": {"type": "number", "minimum": 0.1, "maximum": 1.0, "default": 0.92},
-            "escort_gain": {"type": "number", "minimum": 0.1, "maximum": 1.0, "default": 0.72},
-            "intercept_gain": {"type": "number", "minimum": 0.1, "maximum": 1.0, "default": 0.95},
-            "block_gain": {"type": "number", "minimum": 0.1, "maximum": 1.0, "default": 0.62},
-            "avoidance_radius": {"type": "number", "minimum": 0.5, "maximum": 6.0, "default": 2.5},
-            "avoidance_gain": {"type": "number", "minimum": 0.0, "maximum": 1.0, "default": 0.45},
-            "velocity_damping": {"type": "number", "minimum": 0.0, "maximum": 0.5, "default": 0.10},
-            "prediction_horizon": {"type": "number", "minimum": 0.0, "maximum": 1.5, "default": 0.35},
+            "desired_speed": {"type": "number", "minimum": 0.5, "maximum": 8.0, "default": 4.5},
+            "position_gain": {"type": "number", "minimum": 0.1, "maximum": 5.0, "default": 1.2},
+            "velocity_gain": {"type": "number", "minimum": 0.1, "maximum": 5.0, "default": 2.2},
+            "risk_margin": {"type": "number", "minimum": 0.1, "maximum": 2.0, "default": 0.75},
+            "boundary_margin": {"type": "number", "minimum": 0.5, "maximum": 3.0, "default": 1.2},
+            "turn_steps": {"type": "integer", "minimum": 2, "maximum": 64, "default": 12},
+            "turn_lookahead": {"type": "number", "minimum": 1.0, "maximum": 12.0, "default": 5.0},
+            "risk_lookahead_steps": {"type": "integer", "minimum": 4, "maximum": 64, "default": 18},
+            "brake_release_speed": {"type": "number", "minimum": 0.0, "maximum": 2.0, "default": 0.35},
+            "lane_spacing": {"type": "number", "minimum": 0.2, "maximum": 3.0, "default": 1.2},
+            "gate_approach_offset": {"type": "number", "minimum": 1.0, "maximum": 8.0, "default": 4.0},
+            "gate_exit_offset": {"type": "number", "minimum": 1.0, "maximum": 8.0, "default": 3.0},
+            "separation_gain": {"type": "number", "minimum": 0.5, "maximum": 8.0, "default": 4.0},
             "reserved_action_value": {"type": "number", "minimum": 0.0, "maximum": 0.0, "default": 0.0},
         }
 
@@ -112,65 +148,78 @@ class RuleWideSlalom2v2Policy(Policy):
         return False
 
     def get_diagnostics(self) -> dict[str, Any]:
-        return {"seed": self._seed, "checkpoint_path": self._checkpoint_path, "family": "rule_based"}
-
-    def _role_command(self, observation: np.ndarray, agent_id: str) -> np.ndarray:
-        parsed = self._parse_observation(observation)
-        self_velocity = parsed["self_velocity"]
-        opponent_position = parsed["nearest_opponent_position"]
-        opponent_velocity = parsed["nearest_opponent_velocity"]
-        gate_direction = parsed["gate_direction"]
-
-        if agent_id == "red_racer_0":
-            desired = self._normalize(gate_direction) * self.config["racer_gain"]
-            desired += self._avoidance(opponent_position)
-        elif agent_id == "red_defender_0":
-            lateral = np.array([-gate_direction[1], gate_direction[0]], dtype=np.float32)
-            desired = self._normalize(gate_direction + 0.35 * self._normalize(lateral)) * self.config["escort_gain"]
-            desired += 0.5 * self._avoidance(opponent_position)
-        elif agent_id == "blue_defender_0":
-            intercept_point = opponent_position + opponent_velocity * self.config["prediction_horizon"]
-            desired = self._normalize(intercept_point) * self.config["intercept_gain"]
-        elif agent_id == "blue_racer_0":
-            lateral = self._lane_offset(gate_direction, agent_id)
-            route = self._normalize(gate_direction + 0.65 * lateral) * 0.75
-            spacing = self._avoidance(opponent_position) * 1.4
-            desired = self._normalize(route + spacing) * self.config["block_gain"]
-        else:
-            desired = self._normalize(gate_direction) * self.config["racer_gain"]
-
-        desired -= self_velocity * self.config["velocity_damping"]
-        return desired.astype(np.float32)
-
-    def _parse_observation(self, observation: np.ndarray) -> dict[str, np.ndarray]:
-        if observation.shape[0] >= 32:
-            return {
-                "self_velocity": observation[2:4],
-                "nearest_opponent_position": observation[26:28],
-                "nearest_opponent_velocity": observation[28:30],
-                "gate_direction": observation[17:19],
-            }
         return {
-            "self_velocity": observation[2:4],
-            "nearest_opponent_position": observation[4:6],
-            "nearest_opponent_velocity": observation[6:8],
-            "gate_direction": observation[9:11],
+            "seed": self._seed,
+            "checkpoint_path": self._checkpoint_path,
+            "policy_type": "TeamAwareSafeRulePolicy",
         }
 
-    def _avoidance(self, opponent_position: np.ndarray) -> np.ndarray:
-        distance = float(np.linalg.norm(opponent_position))
-        radius = self.config["avoidance_radius"]
-        if distance >= radius or distance < 1e-6:
-            return np.zeros(2, dtype=np.float32)
-        strength = (1.0 - distance / radius) * self.config["avoidance_gain"]
-        return -self._normalize(opponent_position) * strength
+    def _act_from_env(self, raw_env: Any, agent_id: str) -> np.ndarray:
+        if self._needs_env_reset:
+            self._policy.reset(raw_env)
+            self._needs_env_reset = False
+        current_step = int(getattr(raw_env, "step_count", 0))
+        if self._cached_step != current_step or agent_id not in self._cached_actions:
+            raw_actions = self._policy.compute_actions(raw_env)
+            normalized: dict[str, np.ndarray] = {}
+            for name, drone_id in AGENT_TO_ID.items():
+                drone = next(drone for drone in raw_env.drones if drone.id == drone_id)
+                max_accel = float(getattr(drone.dynamics, "max_accel", raw_env.cfg.drone.max_accel))
+                command = np.asarray(raw_actions.get(drone_id, np.zeros(3, dtype=np.float32)), dtype=np.float32)
+                command = np.clip(command / max(max_accel, 1e-6), -1.0, 1.0)
+                action = np.array(
+                    [command[0], command[1], command[2], float(self.config["reserved_action_value"])],
+                    dtype=np.float32,
+                )
+                normalized[name] = self._clip_action(action)
+            self._cached_step = current_step
+            self._cached_actions = normalized
+        return self._cached_actions[agent_id].copy()
 
-    def _lane_offset(self, gate_direction: np.ndarray, agent_id: str) -> np.ndarray:
-        direction = self._normalize(gate_direction)
-        lateral = np.array([-direction[1], direction[0]], dtype=np.float32)
-        if agent_id.startswith("blue"):
-            lateral = -lateral
-        return lateral
+    def _fallback_action(self, obs: Any, agent_id: str) -> np.ndarray:
+        observation = self._extract_observation(obs, agent_id)
+        command = np.zeros(3, dtype=np.float32)
+        if observation.shape[0] >= 32:
+            gate_direction = observation[17:19]
+            nearest_opponent = observation[26:28]
+            command[:2] = self._normalize_2d(gate_direction) * float(self.config["desired_speed"]) / 8.0
+            command[:2] += self._avoidance_2d(nearest_opponent)
+            if "defender" in agent_id:
+                command[:2] *= 0.75
+        elif observation.shape[0] >= 12:
+            gate_direction = observation[9:11]
+            nearest_opponent = observation[4:6]
+            command[:2] = self._normalize_2d(gate_direction) * float(self.config["desired_speed"]) / 8.0
+            command[:2] += self._avoidance_2d(nearest_opponent)
+        action = np.array(
+            [
+                command[0],
+                command[1],
+                command[2],
+                float(self.config["reserved_action_value"]),
+            ],
+            dtype=np.float32,
+        )
+        return self._clip_action(action)
+
+    def _validated_config(self, overrides: dict[str, Any]) -> dict[str, Any]:
+        schema = self.get_config_schema()
+        config = dict(DEFAULT_CONFIG)
+        config.update(overrides)
+        for name, rule in schema.items():
+            value = config.get(name, rule["default"])
+            if rule["type"] == "integer":
+                if not isinstance(value, (int, float)):
+                    raise TypeError(f"{name} must be numeric")
+                value = int(value)
+            else:
+                if not isinstance(value, (int, float)):
+                    raise TypeError(f"{name} must be numeric")
+                value = float(value)
+            if value < rule["minimum"] or value > rule["maximum"]:
+                raise ValueError(f"{name} outside schema range")
+            config[name] = value
+        return config
 
     def _extract_observation(self, obs: Any, agent_id: str) -> np.ndarray:
         value = obs.get(agent_id, obs) if isinstance(obs, dict) else obs
@@ -181,25 +230,21 @@ class RuleWideSlalom2v2Policy(Policy):
             return padded
         return observation
 
-    def _validated_config(self, overrides: dict[str, Any]) -> dict[str, float]:
-        schema = self.get_config_schema()
-        config = dict(DEFAULT_CONFIG)
-        config.update(overrides)
-        for name, rule in schema.items():
-            value = config.get(name, rule["default"])
-            if not isinstance(value, (int, float)):
-                raise TypeError(f"{name} must be numeric")
-            value = float(value)
-            if value < float(rule["minimum"]) or value > float(rule["maximum"]):
-                raise ValueError(f"{name} outside schema range")
-            config[name] = value
-        return config
+    def _avoidance_2d(self, opponent_position: np.ndarray) -> np.ndarray:
+        distance = float(np.linalg.norm(opponent_position))
+        radius = 3.0
+        if distance >= radius or distance < 1e-6:
+            return np.zeros(2, dtype=np.float32)
+        strength = (1.0 - distance / radius) * 0.35
+        return -self._normalize_2d(opponent_position) * strength
 
-    def _normalize(self, vector: np.ndarray) -> np.ndarray:
+    def _normalize_2d(self, vector: np.ndarray) -> np.ndarray:
         norm = float(np.linalg.norm(vector))
         if norm < 1e-6:
             return np.zeros(2, dtype=np.float32)
         return (vector / norm).astype(np.float32)
 
-
-PolicyClass = RuleWideSlalom2v2Policy
+    def _clip_action(self, action: np.ndarray) -> np.ndarray:
+        shield = np.maximum(np.abs(self._action_high) * 1.2, 1e-6).astype(np.float32)
+        shielded = np.clip(action, -shield, shield)
+        return np.clip(shielded, self._action_low, self._action_high).astype(np.float32)

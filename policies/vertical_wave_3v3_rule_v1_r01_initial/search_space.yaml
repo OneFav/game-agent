@@ -1,0 +1,33 @@
+parameters:
+  red_desired_speed:
+    values: [5.4, 5.8, 6.2]
+  blue_desired_speed:
+    values: [5.4, 5.8, 6.2]
+  red_lane_spacing:
+    values: [1.2, 1.4]
+  blue_lane_spacing:
+    values: [1.2, 1.4]
+  red_risk_margin:
+    values: [0.9, 1.2]
+  blue_risk_margin:
+    values: [0.9, 1.2]
+  shared_turn_lookahead:
+    values: [6.0]
+priority_groups:
+  priority_1: [red_desired_speed, blue_desired_speed, red_lane_spacing, blue_lane_spacing, red_risk_margin, blue_risk_margin]
+  priority_2: [shared_turn_lookahead]
+  do_not_tune:
+    - shared_position_gain
+    - shared_velocity_gain
+    - shared_boundary_margin
+    - shared_turn_steps
+    - shared_risk_lookahead_steps
+    - shared_brake_release_speed
+    - shared_gate_approach_offset
+    - shared_gate_exit_offset
+    - shared_separation_gain
+    - red_defender_mode
+    - blue_defender_mode
+budget:
+  max_trials: 18
+  seeds_per_trial: 3

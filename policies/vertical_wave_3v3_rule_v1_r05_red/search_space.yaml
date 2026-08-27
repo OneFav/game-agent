@@ -1,0 +1,150 @@
+parameters:
+  red_desired_speed:
+    type: number
+    range: [6.4, 8.0]
+    values: [6.4, 6.6, 7.0]
+    default: 6.6
+  red_risk_margin:
+    type: number
+    range: [0.5, 1.2]
+    values: [0.65, 0.8, 1.0]
+    default: 0.8
+  red_lane_spacing:
+    type: number
+    range: [1.4, 2.2]
+    values: [1.4, 1.6, 1.9]
+    default: 1.6
+  red_breakout_gain:
+    type: number
+    range: [0.0, 1.5]
+    values: [0.0, 0.4, 0.8]
+    default: 0.0
+  red_escape_gain:
+    type: number
+    range: [0.0, 2.0]
+    values: [0.0, 0.8, 1.25]
+    default: 0.8
+  red_screen_gain:
+    type: number
+    range: [0.0, 2.0]
+    values: [0.0, 0.4, 0.8]
+    default: 0.0
+  red_defender_mode:
+    type: string
+    values: [escort, intercept]
+    default: escort
+  blue_desired_speed:
+    type: number
+    range: [6.4, 6.4]
+    values: [6.4]
+    default: 6.4
+  blue_risk_margin:
+    type: number
+    range: [1.4, 1.4]
+    values: [1.4]
+    default: 1.4
+  blue_lane_spacing:
+    type: number
+    range: [1.4, 1.4]
+    values: [1.4]
+    default: 1.4
+  blue_defender_mode:
+    type: string
+    values: [escort]
+    default: escort
+  blue_intercept_gain:
+    type: number
+    range: [2.6, 2.6]
+    values: [2.6]
+    default: 2.6
+  blue_intercept_radius:
+    type: number
+    range: [5.0, 5.0]
+    values: [5.0]
+    default: 5.0
+  blue_pressure_buffer:
+    type: number
+    range: [1.0, 1.0]
+    values: [1.0]
+    default: 1.0
+  shared_position_gain:
+    type: number
+    range: [1.3, 1.3]
+    values: [1.3]
+    default: 1.3
+  shared_velocity_gain:
+    type: number
+    range: [2.2, 2.2]
+    values: [2.2]
+    default: 2.2
+  shared_boundary_margin:
+    type: number
+    range: [1.2, 1.2]
+    values: [1.2]
+    default: 1.2
+  shared_turn_steps:
+    type: integer
+    range: [12, 12]
+    values: [12]
+    default: 12
+  shared_turn_lookahead:
+    type: number
+    range: [6.0, 6.0]
+    values: [6.0]
+    default: 6.0
+  shared_risk_lookahead_steps:
+    type: integer
+    range: [18, 18]
+    values: [18]
+    default: 18
+  shared_brake_release_speed:
+    type: number
+    range: [0.35, 0.35]
+    values: [0.35]
+    default: 0.35
+  shared_gate_approach_offset:
+    type: number
+    range: [4.5, 4.5]
+    values: [4.5]
+    default: 4.5
+  shared_gate_exit_offset:
+    type: number
+    range: [3.5, 3.5]
+    values: [3.5]
+    default: 3.5
+  shared_separation_gain:
+    type: number
+    range: [4.5, 4.5]
+    values: [4.5]
+    default: 4.5
+priority_groups:
+  priority_1:
+    - red_desired_speed
+    - red_risk_margin
+    - red_lane_spacing
+    - red_breakout_gain
+    - red_escape_gain
+    - red_screen_gain
+  priority_2:
+    - red_defender_mode
+  do_not_tune:
+    - blue_desired_speed
+    - blue_risk_margin
+    - blue_lane_spacing
+    - blue_defender_mode
+    - blue_intercept_gain
+    - blue_intercept_radius
+    - blue_pressure_buffer
+    - shared_position_gain
+    - shared_velocity_gain
+    - shared_boundary_margin
+    - shared_turn_steps
+    - shared_turn_lookahead
+    - shared_risk_lookahead_steps
+    - shared_brake_release_speed
+    - shared_gate_approach_offset
+    - shared_gate_exit_offset
+    - shared_separation_gain
+budget:
+  max_trials: 18
+  seeds_per_trial: 3

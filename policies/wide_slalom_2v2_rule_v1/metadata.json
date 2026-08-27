@@ -3,7 +3,8 @@
   "policy_class": "PolicyClass",
   "algorithm_family": "rule_based",
   "scenario_id": "wide_slalom_2v2_001",
+  "scenario_family": "swarm_combat",
   "supports_training": false,
   "action_shape": [4],
-  "observation_shape": [32]
+  "observation_shape": [78]
 }

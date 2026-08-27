@@ -5,9 +5,11 @@ import subprocess
 import sys
 from pathlib import Path
 
-from game_agent.autoresearch import AutoResearchRunner
+from game_agent.autoresearch import AutoResearchRunner, ScenarioSuiteRunner
+from game_agent.autoresearch.suite_runner import load_suite
 from game_agent.policy_designer import PolicyDesigner
 from game_agent.scenario_compiler import ScenarioCompiler
+from game_agent.visualization.service import serve_viewer
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -46,6 +48,43 @@ def main(argv: list[str] | None = None) -> int:
             print(f"experiment: {exp_dir}")
             return 0
 
+        if args.command == "validate-suite":
+            suite_path = _resolve_input(project_root, args.suite)
+            suite, specs = load_suite(suite_path)
+            print(f"suite validation passed: {suite['suite_id']} ({len(specs)} scenarios)")
+            return 0
+
+        if args.command == "run-suite":
+            suite_path = _resolve_input(project_root, args.suite)
+            output_dir = _resolve_output(project_root, args.output)
+            result_dir = ScenarioSuiteRunner(project_root).run(
+                suite_path, output_dir, resume=args.resume
+            )
+            _run_hook(
+                REPO_ROOT / "src" / "hooks" / "post_suite_run.py",
+                "--suite-run",
+                result_dir,
+            )
+            print(f"suite run: {result_dir}")
+            return 0
+
+        if args.command == "render-suite":
+            output_dir = _resolve_output(project_root, args.output)
+            figures = ScenarioSuiteRunner(project_root).render_existing(output_dir)
+            for figure in figures:
+                print(f"figure: {figure}")
+            return 0
+
+        if args.command in {"workbench", "view-suite"}:
+            run_dir = _resolve_input(project_root, args.run)
+            serve_viewer(
+                project_root,
+                run_dir,
+                host=args.host,
+                port=args.port,
+            )
+            return 0
+
         parser.print_help()
         return 1
     except Exception as error:
@@ -54,7 +93,7 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Game Agent M1 orchestration CLI.")
+    parser = argparse.ArgumentParser(description="AutoGame experiment workbench CLI.")
     parser.add_argument("--project-root", default=".", help="Output project root.")
 
     project_root_parent = argparse.ArgumentParser(add_help=False)
@@ -62,7 +101,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    run_parser = subparsers.add_parser("run", parents=[project_root_parent], help="Run the full M1 pipeline.")
+    run_parser = subparsers.add_parser("run", parents=[project_root_parent], help="Run the legacy single-project pipeline.")
     run_parser.add_argument("--task", required=True)
     run_parser.add_argument("--task-id", required=True)
     run_parser.add_argument("--policy-id", required=True)
@@ -92,6 +131,47 @@ def _build_parser() -> argparse.ArgumentParser:
     exp_parser.add_argument("--scenario", required=True)
     exp_parser.add_argument("--policy", required=True)
     exp_parser.add_argument("--exp-id", required=True)
+
+    validate_suite_parser = subparsers.add_parser(
+        "validate-suite",
+        parents=[project_root_parent],
+        help="Validate a frozen representative scenario suite.",
+    )
+    validate_suite_parser.add_argument("--suite", required=True)
+
+    run_suite_parser = subparsers.add_parser(
+        "run-suite",
+        parents=[project_root_parent],
+        help="Run a representative scenario suite with isolated, resumable outputs.",
+    )
+    run_suite_parser.add_argument("--suite", required=True)
+    run_suite_parser.add_argument("--output", required=True)
+    run_suite_parser.add_argument("--resume", action="store_true")
+
+    render_suite_parser = subparsers.add_parser(
+        "render-suite",
+        parents=[project_root_parent],
+        help="Regenerate figures for an existing suite run.",
+    )
+    render_suite_parser.add_argument("--output", required=True)
+
+    view_suite_parser = subparsers.add_parser(
+        "view-suite",
+        parents=[project_root_parent],
+        help="Compatibility alias for the local experiment workbench.",
+    )
+    view_suite_parser.add_argument("--run", required=True)
+    view_suite_parser.add_argument("--host", default="127.0.0.1")
+    view_suite_parser.add_argument("--port", type=int, default=8765)
+
+    workbench_parser = subparsers.add_parser(
+        "workbench",
+        parents=[project_root_parent],
+        help="Open the local experiment workbench for a suite run.",
+    )
+    workbench_parser.add_argument("--run", required=True)
+    workbench_parser.add_argument("--host", default="127.0.0.1")
+    workbench_parser.add_argument("--port", type=int, default=8765)
 
     return parser
 
@@ -201,6 +281,16 @@ def _resolve_artifact(project_root: Path, collection: str, value: str) -> Path:
         return project_relative.resolve()
 
     return (project_root / collection / path).resolve()
+
+
+def _resolve_input(project_root: Path, value: str) -> Path:
+    path = Path(value)
+    return path.resolve() if path.is_absolute() else (project_root / path).resolve()
+
+
+def _resolve_output(project_root: Path, value: str) -> Path:
+    path = Path(value)
+    return path.resolve() if path.is_absolute() else (project_root / path).resolve()
 
 
 def _print_paths(scenario_dir: Path, policy_dir: Path, exp_dir: Path) -> None:

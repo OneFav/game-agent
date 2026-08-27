@@ -1,0 +1,7 @@
+{
+  "action_violation_rate": 0.0,
+  "avg_episode_length": 77.33333333333333,
+  "collision_rate": 0.3333333333333333,
+  "out_of_bounds_rate": 0.0,
+  "success_rate": 0.6666666666666666
+}

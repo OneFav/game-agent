@@ -1,0 +1,229 @@
+schema_version: "1.0"
+task_id: slalom_1v1_3d_001
+task_family: drone_ring_game
+formalism: MarkovGame
+agents:
+  - id: red_racer_0
+    team: red
+    role: racer
+    objective: maximize_red_team_score
+  - id: blue_racer_0
+    team: blue
+    role: racer
+    objective: deny_red_team_score
+communication:
+  mode: perfect
+scenario_parameters:
+  engine: swarm_combat
+  semantic_task_family: swarm_combat
+  gate_layout: slalom
+  gate_count: 5
+  dynamics: DoubleIntegrator3D
+  max_steps: 400
+  team_score_definition: Red team cumulative sequential gate score with gate_pass_reward fixed to 1.0.
+  compatibility_note: Shared scenario schema still uses task_family=drone_ring_game, so 3D swarm semantics are frozen inside env.py and env_config.yaml.
+observation_space:
+  type: Box
+  shape: [64]
+  dtype: float32
+  low:
+    - -25.0
+    - -25.0
+    - 0.5
+    - -8.0
+    - -8.0
+    - -8.0
+    - -50.0
+    - -50.0
+    - -15.0
+    - -16.0
+    - -16.0
+    - -16.0
+    - -50.0
+    - -50.0
+    - -15.0
+    - -1.0
+    - -1.0
+    - -1.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - -8.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - -50.0
+    - -50.0
+    - -15.0
+    - -50.0
+    - -50.0
+    - -15.0
+    - -50.0
+    - -50.0
+    - -15.0
+    - -50.0
+    - -50.0
+    - -15.0
+    - -50.0
+    - -50.0
+    - -15.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - -50.0
+    - -50.0
+    - -50.0
+    - -50.0
+    - -50.0
+  high:
+    - 25.0
+    - 25.0
+    - 15.0
+    - 8.0
+    - 8.0
+    - 8.0
+    - 50.0
+    - 50.0
+    - 15.0
+    - 16.0
+    - 16.0
+    - 16.0
+    - 50.0
+    - 50.0
+    - 15.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 40.0
+    - 1.0
+    - 5.0
+    - 5.0
+    - 5.0
+    - 5.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 40.0
+    - 8.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 50.0
+    - 50.0
+    - 15.0
+    - 50.0
+    - 50.0
+    - 15.0
+    - 50.0
+    - 50.0
+    - 15.0
+    - 50.0
+    - 50.0
+    - 15.0
+    - 50.0
+    - 50.0
+    - 15.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 50.0
+    - 50.0
+    - 50.0
+    - 50.0
+    - 50.0
+  description: "[0:3] self position; [3:6] self velocity; [6:12] opponent relative state; [12:18] next target gate geometry; [18:32] score, progress, boundary and team-role summary; [32:47] all gate relative centers; [47:57] gate cooldown ratios; [57:64] signed forward distances and reserved summary."
+action_space:
+  type: Box
+  shape: [3]
+  dtype: float32
+  low: [-1.0, -1.0, -1.0]
+  high: [1.0, 1.0, 1.0]
+  semantics: normalized_acceleration_command
+  description: "[ax, ay, az] in normalized units, clipped in env.py and scaled by DoubleIntegrator3D max_accel."
+reward_structure:
+  shaping: dense
+  components:
+    - name: gate_progress_reward
+      weight: 1.0
+      description: Sequential red gate pass reward used as dense task progress feedback.
+    - name: intercept_pressure_reward
+      weight: 0.35
+      description: Blue receives dense reward for reducing predicted intercept distance to the red racer.
+    - name: collision_penalty
+      weight: -1.0
+      description: Any collision penalizes both teams.
+    - name: out_of_bounds_penalty
+      weight: -1.0
+      description: Leaving the field penalizes the responsible rollout.
+    - name: time_penalty
+      weight: -0.01
+      description: Small step penalty discourages idle motion.
+evaluation_metrics:
+  primary:
+    name: team_score
+    direction: maximize
+    target: 1.0
+    description: Mean red team sequential gate score over evaluation seeds.
+  secondary:
+    - name: blue_team_score
+      direction: minimize
+    - name: red_win_rate
+      direction: maximize
+    - name: avg_episode_length
+      direction: minimize
+    - name: gate_pass_balance
+      direction: maximize
+  hard_constraints:
+    - name: collision_rate
+      direction: minimize
+      max: 0.05
+    - name: out_of_bounds_rate
+      direction: minimize
+      max: 0.01
+    - name: action_violation_rate
+      direction: minimize
+      max: 0.0
+termination_conditions:
+  - type: sequential_gate_course_complete
+    description: Any team reaches the target team_score threshold for this example.
+  - type: target_team_score
+    value: 1.0
+    description: Example 4 rollout stops once either team reaches team_score 1.0.
+  - type: collision_any
+    description: Any collision ends the episode as double loss.
+  - type: out_of_bounds
+    description: Any drone leaving the field ends the episode.
+  - type: timeout
+    steps: 400
+    description: Episode truncates at 400 steps.
+splits:
+  train_seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  val_seeds: [100, 101, 102]
+  hidden_test:
+    path: evaluator/hidden_tests.py
+    description: Reserved downstream held-out seeds.

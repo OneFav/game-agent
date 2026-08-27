@@ -1,0 +1,16 @@
+{
+  "policy_type": "rule_ring_navigation",
+  "seed": 0,
+  "config_path": "./experiments/drone_ring_lossy_3ring_exp_001/trials/trial_0014/config.yaml",
+  "config": {
+    "policy_type": "rule_ring_navigation",
+    "speed_scale": 1.4,
+    "intercept_gain": 0.55,
+    "safety_margin": 1.0,
+    "blue_gate_bias": 0.3,
+    "memory_decay": 0.85,
+    "recovery_gain": 1.1
+  },
+  "scenario": "./scenarios/drone_ring_lossy_3ring_001",
+  "resume_from": null
+}

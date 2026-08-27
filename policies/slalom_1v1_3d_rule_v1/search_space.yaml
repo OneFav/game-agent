@@ -1,0 +1,39 @@
+parameters:
+  racer_gain:
+    type: number
+    values: [0.72, 0.82, 0.92]
+    default: 0.82
+    priority: priority_1
+  intercept_gain:
+    type: number
+    values: [0.60, 0.74, 0.88]
+    default: 0.74
+    priority: priority_1
+  avoidance_gain:
+    type: number
+    values: [0.30, 0.46, 0.62]
+    default: 0.46
+    priority: priority_1
+  boundary_gain:
+    type: number
+    values: [0.40, 0.58]
+    default: 0.58
+    priority: priority_2
+  prediction_horizon:
+    type: number
+    values: [0.35, 0.55, 0.75]
+    default: 0.55
+    priority: priority_2
+  velocity_damping:
+    type: number
+    values: [0.12, 0.18, 0.24]
+    default: 0.18
+    priority: priority_2
+  brake_bias:
+    type: number
+    values: [0.15, 0.25, 0.35]
+    default: 0.25
+    priority: priority_2
+budget:
+  max_trials: 9
+  seeds_per_trial: 3

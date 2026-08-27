@@ -1,0 +1,21 @@
+{
+  "created_at": "2026-06-28T15:03:17+00:00",
+  "files": [
+    "algorithm_card.md",
+    "default_config.yaml",
+    "infer.py",
+    "metadata.json",
+    "policy.py",
+    "requirements.txt",
+    "search_space.yaml",
+    "tests/test_action_bounds.py",
+    "tests/test_deterministic.py",
+    "tests/test_no_side_effects.py",
+    "tests/test_policy_class.py",
+    "train.py"
+  ],
+  "freeze_hash": "35a083f4b085d66cff7c9155ec13951b23e50b0e66823061f9918357a3b1460f",
+  "package_id": "slalom_1v1_3d_rule_v1",
+  "package_type": "policy",
+  "schema_version": "1.0"
+}

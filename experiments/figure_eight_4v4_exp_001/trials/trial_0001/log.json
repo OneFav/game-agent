@@ -1,0 +1,81 @@
+{
+  "trial_id": "trial_0001",
+  "hypothesis": "desired_speed=5.4, lane_spacing=1.4, turn_lookahead=6.0, risk_margin=0.9, defender_mode=escort test figure_eight_4v4 team_score/collision tradeoff on 8-agent 3D wrapper",
+  "scenario_id": "figure_eight_4v4_001",
+  "scenario_freeze_hash": "sha256:f77f54fd349f1e4d61d71f5e5d9ff2c8247ec180fbd05ce5cbd4974f60ec5514",
+  "policy_id": "figure_eight_4v4_rule_v1",
+  "policy_freeze_hash": "sha256:8b6abee20c9b15157ed033e9b16ca6fcc060fa7d25c19425d72dbc3536b997dd",
+  "config_fields_modified": [
+    "desired_speed",
+    "lane_spacing",
+    "turn_lookahead",
+    "risk_margin",
+    "defender_mode"
+  ],
+  "search_space_policy": "full cartesian sweep over declared parameter values",
+  "ranking_source": "task_spec.evaluation_metrics only; reward_structure ignored",
+  "seeds": [
+    100,
+    101,
+    102
+  ],
+  "train": {
+    "command": [
+      "python",
+      "./policies\\figure_eight_4v4_rule_v1\\train.py",
+      "--config",
+      "./experiments\\figure_eight_4v4_exp_001\\trials\\trial_0001\\config.yaml",
+      "--scenario",
+      "./scenarios\\figure_eight_4v4_001",
+      "--seed",
+      "100",
+      "--output_dir",
+      "./experiments\\figure_eight_4v4_exp_001\\trials\\trial_0001\\checkpoint",
+      "--max_steps",
+      "1200",
+      "--wall_time_limit",
+      "7200"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "infer": {
+    "command": [
+      "python",
+      "./policies\\figure_eight_4v4_rule_v1\\infer.py",
+      "--checkpoint",
+      "./experiments\\figure_eight_4v4_exp_001\\trials\\trial_0001\\checkpoint\\checkpoint.json",
+      "--scenario",
+      "./scenarios\\figure_eight_4v4_001",
+      "--eval_seeds",
+      "100,101,102",
+      "--output",
+      "./experiments\\figure_eight_4v4_exp_001\\trials\\trial_0001\\infer_results.json"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "promotion_gate": {
+    "hard_constraints_passed": true,
+    "primary_metric_gate": {
+      "passed": true,
+      "threshold": 4.0,
+      "value": 4.0
+    },
+    "stability_gate": {
+      "passed": true,
+      "std": 0.0,
+      "threshold": 0.05,
+      "seeds": [
+        100,
+        101,
+        102
+      ]
+    },
+    "promotion_passed": true
+  },
+  "decision": "promote",
+  "wall_time_seconds": 20.474081000080332
+}

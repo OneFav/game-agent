@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "test_name": "coupling_load_empty_field",
+  "policy_id": "wide_slalom_2v2_rule_v1",
+  "scenario_id": "wide_slalom_2v2_001",
+  "best_trial": "trial_0008",
+  "seeds": [
+    100,
+    101,
+    102
+  ],
+  "utility_definition": "U_R = red_score - blue_score; this is the red coupled payoff used only for the game-existence gate.",
+  "empty_condition": "Blue agents are spawned far from the gate field and forced to zero actions; red policy, config, scenario wrapper, and seeds are unchanged.",
+  "true_blue": [
+    {
+      "seed": 100,
+      "condition": "true_blue",
+      "red_score": 6.0,
+      "blue_score": 7.0,
+      "red_reward_sum_observed": 128.66448288936456,
+      "u_r": -1.0,
+      "episode_length": 600
+    },
+    {
+      "seed": 101,
+      "condition": "true_blue",
+      "red_score": 6.0,
+      "blue_score": 7.0,
+      "red_reward_sum_observed": 128.66448288936456,
+      "u_r": -1.0,
+      "episode_length": 600
+    },
+    {
+      "seed": 102,
+      "condition": "true_blue",
+      "red_score": 6.0,
+      "blue_score": 7.0,
+      "red_reward_sum_observed": 128.66448288936456,
+      "u_r": -1.0,
+      "episode_length": 600
+    }
+  ],
+  "empty_blue": [
+    {
+      "seed": 100,
+      "condition": "empty_blue",
+      "red_score": 6.0,
+      "blue_score": 0.0,
+      "red_reward_sum_observed": 19.863614160999276,
+      "u_r": 6.0,
+      "episode_length": 600
+    },
+    {
+      "seed": 101,
+      "condition": "empty_blue",
+      "red_score": 6.0,
+      "blue_score": 0.0,
+      "red_reward_sum_observed": 19.863614160999276,
+      "u_r": 6.0,
+      "episode_length": 600
+    },
+    {
+      "seed": 102,
+      "condition": "empty_blue",
+      "red_score": 6.0,
+      "blue_score": 0.0,
+      "red_reward_sum_observed": 19.863614160999276,
+      "u_r": 6.0,
+      "episode_length": 600
+    }
+  ],
+  "u_r_empty": 6.0,
+  "u_r_true_blue": -1.0,
+  "delta_coupling_load": 7.0,
+  "passed": true,
+  "diagnostics": {
+    "score_delta_only": 0.0,
+    "observed_reward_delta_only": -108.80086872836529
+  }
+}

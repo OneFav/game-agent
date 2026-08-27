@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "drone_ring_delay_2_ppo_v1",
+  "scenario_id": "drone_ring_delay_2_001",
+  "source": {
+    "repository": "Sailero/mvp_inner_loop",
+    "revision": "8aa6a22f055312b7970bf073f1e4af65560aef27",
+    "adaptation": "Reviewed PPO actor/critic, trajectory buffer, checkpoint validation, and action scaling were moved into src/game_agent/rl and adapted to repository contracts."
+  },
+  "method": {
+    "family": "actor_critic",
+    "name": "independent_ppo_red_vs_frozen_blue",
+    "learning_paradigm": "online_rl",
+    "algorithm_family": "ppo",
+    "multi_agent_paradigm": "single learned agent against frozen scripted opponent",
+    "execution_mode": "decentralized",
+    "trained_parties": ["red_0"],
+    "frozen_parties": ["blue_0"],
+    "parameter_sharing": "none",
+    "execution_information": "red_0 local 12-dimensional observation only",
+    "training_privileged_state": false,
+    "explicit_opponent_model": false,
+    "why_learning": "Delayed continuous interception creates state-dependent avoidance and timing trade-offs that a fixed geometric rule does not adapt across initial perturbations; MPC would require a trusted opponent dynamics model that the scenario does not provide."
+  },
+  "method_hypothesis": {
+    "statement": "Online PPO with dense ring-distance progress shaping can learn a bounded red_0 controller that improves scenario success_rate against a frozen delayed interceptor without violating collision, boundary, or action constraints.",
+    "suspected_bottlenecks": [
+      "Sparse ring completion reward",
+      "Policy-gradient sensitivity to actor learning rate",
+      "Reward-scale balance between progress and safety"
+    ],
+    "optimization_guidance": [
+      "First tune actor learning rate and bounded distance-progress reward weight.",
+      "Keep scenario success_rate and hard constraints as promotion authority; never promote by training reward.",
+      "If stage 1 plateaus, adjust the PPO training recipe before changing policy-local architecture."
+    ]
+  },
+  "immutable_boundaries": {
+    "method_invariants": [
+      "PPO remains the learned algorithm family.",
+      "Only red_0 is trained; blue_0 remains frozen.",
+      "Execution is decentralized and consumes only the acting agent local observation.",
+      "No explicit opponent-model state is added."
+    ],
+    "forbidden_changes": [
+      "Do not modify the frozen scenario package.",
+      "Do not expose training-only global state at inference.",
+      "Do not change trained or frozen parties.",
+      "Do not rank or promote by training reward."
+    ],
+    "information_limits": "No global state or future opponent action is available to the learned policy.",
+    "action_safety": "Two learned normalized acceleration components are scaled into the first two scenario action dimensions; unused dimensions are zero and the final vector is clipped to scenario bounds.",
+    "evaluation_source": "scenario.evaluation_metrics"
+  },
+  "reward_design": {
+    "environment_terms": ["ring_progress", "terminal_success", "timeout_penalty"],
+    "training_only_shaping": ["ring_distance_progress", "control_l2", "collision_penalty", "out_of_bounds_penalty"],
+    "evaluation_authority": "scenario.evaluation_metrics"
+  },
+  "budget_and_baselines": {
+    "baseline": "same-seed untrained PPO initialization",
+    "max_trials": 4,
+    "max_train_steps_per_run": 6000,
+    "train_seed": 23,
+    "evaluation_seeds": [0, 1, 2]
+  },
+  "checkpoint_binding": {
+    "method": "independent_ppo_red_vs_frozen_blue",
+    "observation_contract": "float32 box[12] normalized by drone_ring_obs_scale_v1",
+    "action_contract": "learned box[2] in [-1,1], mapped to scenario box[4] with final clipping",
+    "agent_count": 2,
+    "trained_parties": ["red_0"],
+    "parameter_sharing": "none",
+    "preprocessing": "drone_ring_obs_scale_v1"
+  }
+}

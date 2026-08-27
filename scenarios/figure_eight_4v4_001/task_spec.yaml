@@ -1,0 +1,137 @@
+schema_version: "1.0"
+task_id: figure_eight_4v4_001
+task_family: drone_ring_game
+formalism: POSG
+agents:
+  - id: red_racer_0
+    team: red
+    role: racer
+    objective: maximize_team_gate_progress
+  - id: red_racer_1
+    team: red
+    role: racer
+    objective: maximize_team_gate_progress
+  - id: red_defender_0
+    team: red
+    role: defender
+    behavior_mode: escort
+    objective: protect_red_racers
+  - id: red_defender_1
+    team: red
+    role: defender
+    behavior_mode: escort
+    objective: protect_red_racers
+  - id: blue_racer_0
+    team: blue
+    role: racer
+    objective: contest_and_score
+  - id: blue_racer_1
+    team: blue
+    role: racer
+    objective: contest_and_score
+  - id: blue_defender_0
+    team: blue
+    role: defender
+    behavior_mode: screen
+    objective: disrupt_red_progress
+  - id: blue_defender_1
+    team: blue
+    role: defender
+    behavior_mode: screen
+    objective: disrupt_red_progress
+communication:
+  mode: perfect
+scenario_parameters:
+  engine: swarm_combat
+  semantic_task_family: swarm_combat
+  gate_layout: figure_eight
+  gate_count: 6
+  gate_pass_mode: team_forward_bidirectional
+  dynamics: DampedDoubleIntegrator3D
+  max_steps: 1200
+  team_score_definition: normalized_red_gate_pass_count
+  compatibility_note: Shared scenario schema and hooks still follow the drone_ring_game contract, so 4v4 3D semantics are frozen in env.py and env_config.yaml.
+observation_space:
+  type: Box
+  shape: [110]
+  dtype: float32
+  low: [-50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -1.0, -1.0, -50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -1.0, -1.0, -50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -1.0, -1.0, -50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -1.0, -1.0, -50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -1.0, -1.0, -50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -1.0, -1.0, -50.0, -50.0, -50.0, -20.0, -20.0, -20.0, -1.0, -1.0, -50.0, -50.0, -50.0, -1.0, -1.0, -1.0, 0.0, 0.0, -50.0, -50.0, -50.0, -1.0, -1.0, -1.0, 0.0, 0.0, -50.0, -50.0, -50.0, -1.0, -1.0, -1.0, 0.0, 0.0, -50.0, -50.0, -50.0, -1.0, -1.0, -1.0, 0.0, 0.0, -50.0, -50.0, -50.0, -1.0, -1.0, -1.0, 0.0, 0.0, -50.0, -50.0, -50.0, -1.0, -1.0, -1.0, 0.0, 0.0]
+  high: [50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 1.0, 1.0, 50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 1.0, 1.0, 50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 1.0, 1.0, 50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 1.0, 1.0, 50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 1.0, 1.0, 50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 1.0, 1.0, 50.0, 50.0, 50.0, 20.0, 20.0, 20.0, 1.0, 1.0, 50.0, 50.0, 50.0, 1.0, 1.0, 1.0, 1.0, 1.0, 50.0, 50.0, 50.0, 1.0, 1.0, 1.0, 1.0, 1.0, 50.0, 50.0, 50.0, 1.0, 1.0, 1.0, 1.0, 1.0, 50.0, 50.0, 50.0, 1.0, 1.0, 1.0, 1.0, 1.0, 50.0, 50.0, 50.0, 1.0, 1.0, 1.0, 1.0, 1.0, 50.0, 50.0, 50.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+  partial_observability: true
+  description: "6 维自状态 + 7 个其他无人机的相对状态块（各 8 维）+ 6 个门的相对状态块（各 8 维），总计 110 维。"
+action_space:
+  type: Box
+  shape: [3]
+  dtype: float32
+  low: [-10.0, -10.0, -10.0]
+  high: [10.0, 10.0, 10.0]
+  semantics: acceleration_setpoint
+  description: "[ax, ay, az] normalized acceleration command for the 3D swarm_combat wrapper."
+reward_structure:
+  shaping: dense
+  components:
+    - name: gate_progress_reward
+      weight: 1.0
+      description: Effective gate pass contributes normalized team progress.
+    - name: formation_reward
+      weight: 0.25
+      description: Encourage racers to maintain separated lanes and defenders to stay nearby.
+    - name: interception_reward
+      weight: 0.2
+      description: Encourage pressure around opposing racers at the figure-eight crossing region.
+    - name: protection_reward
+      weight: 0.2
+      description: Reward escort behavior around allied racers.
+    - name: safety_penalty
+      weight: -0.5
+      description: Penalize near-safety-distance violations before hard constraints trigger.
+    - name: collision_penalty
+      weight: -5.0
+      description: Penalize any collision.
+    - name: boundary_penalty
+      weight: -5.0
+      description: Penalize out-of-bounds.
+    - name: time_penalty
+      weight: -0.01
+      description: Encourage efficient completion.
+evaluation_metrics:
+  primary:
+    name: team_score
+    direction: maximize
+    target: 4.0
+    promotion_threshold: 4.0
+    description: Average normalized red team score, equal to red effective gate pass count because gate_pass_reward=1.0.
+  secondary:
+    - name: score_margin
+      direction: maximize
+    - name: blue_team_score
+      direction: minimize
+    - name: avg_episode_length
+      direction: minimize
+    - name: red_win_rate
+      direction: maximize
+  hard_constraints:
+    - name: collision_rate
+      direction: minimize
+      max: 0.05
+      description: Fraction of episodes with any collision event must remain low.
+    - name: out_of_bounds_rate
+      direction: minimize
+      max: 0.01
+      description: Fraction of episodes with any out-of-bounds event.
+    - name: action_violation_rate
+      direction: minimize
+      max: 0.0
+      description: Policy outputs must already satisfy the action bounds.
+termination_conditions:
+  - type: collision_any
+    description: Episode ends when a collision rule triggers.
+  - type: out_of_bounds
+    description: Episode ends when any drone leaves the valid field.
+  - type: timeout
+    steps: 1200
+    description: Episode truncates at 1200 steps.
+splits:
+  train_seeds: [0, 1, 2, 3, 4, 5]
+  eval:
+    seeds: [100, 101, 102]

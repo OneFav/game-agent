@@ -1,0 +1,16 @@
+{
+  "created_at": "2026-06-28T14:48:08+00:00",
+  "files": [
+    "assumptions.md",
+    "env.py",
+    "env_config.yaml",
+    "model.md",
+    "task_spec.yaml",
+    "tests/test_obs_action_shape.py",
+    "tests/test_reset_deterministic.py"
+  ],
+  "freeze_hash": "2ae2b63a9af38418bd8f60d6239c3d19a64b6787c1ae31335e1bc8f3ba98c0a8",
+  "package_id": "drone_ring_delay_2_001",
+  "package_type": "scenario",
+  "schema_version": "1.0"
+}

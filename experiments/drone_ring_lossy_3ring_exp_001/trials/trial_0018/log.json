@@ -1,0 +1,67 @@
+{
+  "config": {
+    "blue_gate_bias": 0.3,
+    "intercept_gain": 0.95,
+    "memory_decay": 0.85,
+    "policy_type": "rule_ring_navigation",
+    "recovery_gain": 1.1,
+    "safety_margin": 1.0,
+    "speed_scale": 1.4
+  },
+  "decision": "continue",
+  "feasible": false,
+  "hypothesis": "speed_scale=1.4, intercept_gain=0.95, safety_margin=1.0 will rebalance timeout risk and interception pressure",
+  "per_seed_metrics": [
+    {
+      "action_violation_rate": 0.0,
+      "collision": true,
+      "collision_rate": 1.0,
+      "communication_drop_events": 17,
+      "episode_length": 43,
+      "out_of_bounds": false,
+      "out_of_bounds_rate": 0.0,
+      "ring_passed_count": 1,
+      "seed": 0,
+      "success": false,
+      "success_rate": 0.0,
+      "timeout": false,
+      "timeout_rate": 0.0
+    },
+    {
+      "action_violation_rate": 0.0,
+      "collision": true,
+      "collision_rate": 1.0,
+      "communication_drop_events": 30,
+      "episode_length": 72,
+      "out_of_bounds": false,
+      "out_of_bounds_rate": 0.0,
+      "ring_passed_count": 2,
+      "seed": 1,
+      "success": false,
+      "success_rate": 0.0,
+      "timeout": false,
+      "timeout_rate": 0.0
+    },
+    {
+      "action_violation_rate": 0.0,
+      "collision": true,
+      "collision_rate": 1.0,
+      "communication_drop_events": 30,
+      "episode_length": 74,
+      "out_of_bounds": false,
+      "out_of_bounds_rate": 0.0,
+      "ring_passed_count": 3,
+      "seed": 2,
+      "success": true,
+      "success_rate": 1.0,
+      "timeout": false,
+      "timeout_rate": 0.0
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "trial_id": "trial_0018"
+}

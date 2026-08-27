@@ -1,4 +1,4 @@
-﻿# Python caches
+# Python caches
 __pycache__/
 *.py[cod]
 *$py.class
@@ -27,10 +27,26 @@ Thumbs.db
 # Local assistant/tool runtime state
 .omx/
 .superpowers/
+.autogame/
 
-# Local generated demos
+# Local generated demos and scratch runs
 .tmp-*
 .tmp*
+**/_smoke/
+
+# Bulky reproducible suite outputs
+suite_runs/
+
+# Local workbench projects (may contain prompts, logs and absolute paths)
+scenarios/local-*/
+policies/local-*/
+experiments/local-*/
+
+# Local exports and design scratch files
+output/
+ppt/
+/2.md
+/3.md
 
 # External reference repos (cloned for local development only)
 example-inner/

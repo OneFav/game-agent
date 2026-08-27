@@ -1,0 +1,37 @@
+{
+  "test_name": "blue_coupling_load_empty_red",
+  "target_side": "blue",
+  "utility_side": "blue",
+  "utility_source": "avg_blue_score / avg_red_score from evaluator score outputs",
+  "empty_condition": "Red drones are held in-field but far from gates/race lanes and forced to zero actions; blue policy, config, scenario wrapper, and seeds are unchanged.",
+  "selected_trial": "trial_0011",
+  "seeds": [
+    11,
+    17,
+    23
+  ],
+  "empty_field_score": 11.666666666666666,
+  "true_opponent_score": 9.0,
+  "delta": 2.666666666666666,
+  "passed": true,
+  "per_seed": [
+    {
+      "seed": 11,
+      "red_score": 0.0,
+      "blue_score": 11.0,
+      "side_score": 11.0
+    },
+    {
+      "seed": 17,
+      "red_score": 0.0,
+      "blue_score": 12.0,
+      "side_score": 12.0
+    },
+    {
+      "seed": 23,
+      "red_score": 0.0,
+      "blue_score": 12.0,
+      "side_score": 12.0
+    }
+  ]
+}

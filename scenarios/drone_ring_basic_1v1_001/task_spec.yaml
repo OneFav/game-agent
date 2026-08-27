@@ -1,0 +1,104 @@
+schema_version: '1.0'
+task_id: drone_ring_basic_1v1_001
+task_family: drone_ring_game
+formalism: POSG
+agents:
+- id: red_0
+  role: runner
+- id: blue_0
+  role: interceptor
+communication:
+  mode: perfect
+observation_space:
+  type: box
+  shape:
+  - 12
+  dtype: float32
+  low:
+  - -10.0
+  - -10.0
+  - -10.0
+  - -10.0
+  - -10.0
+  - -10.0
+  - -10.0
+  - -10.0
+  - -10.0
+  - -10.0
+  - -10.0
+  - -10.0
+  high:
+  - 10.0
+  - 10.0
+  - 10.0
+  - 10.0
+  - 10.0
+  - 10.0
+  - 10.0
+  - 10.0
+  - 10.0
+  - 10.0
+  - 10.0
+  - 10.0
+action_space:
+  type: box
+  shape:
+  - 4
+  dtype: float32
+  low:
+  - -2.0
+  - -2.0
+  - -1.0
+  - -1.0
+  high:
+  - 2.0
+  - 2.0
+  - 1.0
+  - 1.0
+  semantics: velocity_setpoint
+  description: '[0] vx (m/s); [1] vy (m/s); [2] vz (m/s); [3] yaw_rate (rad/s).'
+reward_structure:
+  components:
+  - name: ring_progress
+    agent: red_0
+  - name: interception
+    agent: blue_0
+  - name: timeout_penalty
+    agent: red_0
+evaluation_metrics:
+  primary:
+    name: success_rate
+    direction: maximize
+    description: Fraction of episodes where red passes all rings.
+  secondary:
+  - name: collision_rate
+    direction: minimize
+  - name: timeout_rate
+    direction: minimize
+  - name: episode_length
+    direction: minimize
+  hard_constraints:
+  - name: collision_rate
+    direction: minimize
+    max: 0.05
+  - name: out_of_bounds_rate
+    direction: minimize
+    max: 0.01
+  - name: action_violation_rate
+    direction: minimize
+    max: 0.0
+termination_conditions:
+- red_passes_all_rings
+- blue_intercepts_red
+- out_of_bounds
+splits:
+  train:
+    episodes: 100
+  eval:
+    episodes: 20
+env_config:
+  ring_count: 2
+  max_steps: 60
+  ring_radius: 0.45
+  collision_radius: 0.25
+  boundary: 10.0

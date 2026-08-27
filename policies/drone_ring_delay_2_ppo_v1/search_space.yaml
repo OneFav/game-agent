@@ -1,0 +1,19 @@
+schema_version: '1.0'
+stage: 1
+baseline:
+  mode: untrained
+  identity: policy.untrained_initialization
+parameters:
+  learning_rate:
+    type: categorical
+    values: [0.0003, 0.001]
+  progress_reward_weight:
+    type: categorical
+    values: [1.0, 3.0]
+budget:
+  max_trials: 4
+  train_seed: 23
+  max_train_steps: 6000
+  wall_time_limit_seconds: 300
+  log_interval: 500
+  seeds_per_trial: 3

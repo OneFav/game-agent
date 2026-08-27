@@ -1044,7 +1044,8 @@ Expected: all tests PASS.
 Run:
 
 ```powershell
-$demo = "C:/Users/admin/Desktop/game-agent/.tmp-m1-demo";
+$repo = Resolve-Path ".";
+$demo = Join-Path $repo.Path ".tmp-m1-demo";
 if (Test-Path -LiteralPath $demo) { Remove-Item -LiteralPath $demo -Recurse -Force }
 python -m game_agent run --project-root $demo --task "红方无人机穿过两个圆环，蓝方追击拦截，通信延迟 2 步，超时 60 步" --task-id drone_ring_001 --policy-id rule_ring_nav_v1 --exp-id exp_drone_ring_001
 ```
@@ -1056,8 +1057,8 @@ Expected: exit code 0 and printed paths for scenario, policy, and experiment.
 Run:
 
 ```powershell
-Get-Content -LiteralPath "C:/Users/admin/Desktop/game-agent/.tmp-m1-demo/report.md" -Encoding UTF8
-Get-Content -LiteralPath "C:/Users/admin/Desktop/game-agent/.tmp-m1-demo/task.md" -Encoding UTF8
+Get-Content -LiteralPath ".tmp-m1-demo/report.md" -Encoding UTF8
+Get-Content -LiteralPath ".tmp-m1-demo/task.md" -Encoding UTF8
 ```
 
 Expected:
@@ -1071,8 +1072,9 @@ Expected:
 This is a deletion step. Confirm the resolved path is exactly the disposable demo directory before executing:
 
 ```powershell
-$demo = Resolve-Path "C:/Users/admin/Desktop/game-agent/.tmp-m1-demo";
-if ($demo.Path -eq "C:\Users\admin\Desktop\game-agent\.tmp-m1-demo") {
+$repo = Resolve-Path ".";
+$demo = Resolve-Path ".tmp-m1-demo";
+if ($demo.Path -eq (Join-Path $repo.Path ".tmp-m1-demo")) {
   Remove-Item -LiteralPath $demo.Path -Recurse -Force
 }
 ```
@@ -1085,4 +1087,3 @@ Expected: only `.tmp-m1-demo` is removed.
 - Scope control: The plan excludes PettingZoo, Gymnasium, RL training frameworks, MCP services, GPU orchestration, high-fidelity dynamics, hidden evaluator isolation, and git operations.
 - Type consistency: The plan consistently uses `ScenarioCompiler.compile(task_text, task_id)`, `PolicyDesigner.build(scenario_dir, policy_id)`, and `AutoResearchRunner.run(scenario_dir, policy_dir, exp_id)`.
 - Verification: Every implementation layer has a test-first task and an exact `pytest` command.
-

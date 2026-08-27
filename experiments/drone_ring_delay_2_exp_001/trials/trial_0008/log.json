@@ -1,0 +1,13 @@
+{
+  "decision": "promote",
+  "hypothesis": "speed_scale=1.0, intercept_gain=0.8, safety_margin=0.2 should trade off ring traversal speed against delayed blue pursuit stability.",
+  "policy_id": "drone_ring_delay_2_rule_v1",
+  "scenario_id": "drone_ring_delay_2_001",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "trial_id": "trial_0008",
+  "wall_time_seconds": 0.004969900008291006
+}

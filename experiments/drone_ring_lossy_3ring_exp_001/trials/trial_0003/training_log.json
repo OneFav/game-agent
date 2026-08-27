@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "drone_ring_lossy_3ring_rule_v1",
+  "scenario_id": "drone_ring_lossy_3ring_001",
+  "termination_reason": "max_steps_reached",
+  "checkpoint_path": "checkpoint_final.pt",
+  "checkpoint_hash": "sha256:6de6c2d9a08adb0bff7952d0bde33b2989a1816bde980b0d3a103ab3e4242c48",
+  "status": "completed",
+  "trainer": "no_op",
+  "max_steps": 200,
+  "wall_time_limit": 30.0,
+  "log_interval": 1000,
+  "config_used": {
+    "policy_type": "rule_ring_navigation",
+    "speed_scale": 1.2,
+    "intercept_gain": 0.75,
+    "safety_margin": 0.7,
+    "blue_gate_bias": 0.3,
+    "memory_decay": 0.85,
+    "recovery_gain": 1.1
+  },
+  "seed": 0,
+  "started_at": "2026-06-28T14:57:19+00:00",
+  "finished_at": "2026-06-28T14:57:19+00:00",
+  "wall_time_seconds": 0.0033364000264555216,
+  "total_steps": 200,
+  "final_train_metrics": {
+    "mean_episode_reward": 0.0,
+    "mean_episode_length": 0.0
+  }
+}

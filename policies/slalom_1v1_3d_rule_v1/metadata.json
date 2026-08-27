@@ -1,0 +1,9 @@
+{
+  "policy_id": "slalom_1v1_3d_rule_v1",
+  "policy_class": "PolicyClass",
+  "algorithm_family": "rule_based",
+  "scenario_id": "slalom_1v1_3d_001",
+  "supports_training": false,
+  "action_shape": [3],
+  "observation_shape": [64]
+}

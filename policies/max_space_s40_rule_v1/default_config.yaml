@@ -1,0 +1,8 @@
+strategy: robust_capped
+policy_id: max_space_s40_rule_v1
+gain: 1.0
+damping: 0.55
+action_cap: 0.88
+rate_limit: 2.0
+communication_decay: 0.0
+role_gain: 0.0

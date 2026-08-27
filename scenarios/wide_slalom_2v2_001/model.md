@@ -2,30 +2,27 @@
 
 ## Formalism
 
-This scenario is a partially observable stochastic game (POSG). Four agents act simultaneously: `red_racer_0`, `red_defender_0`, `blue_racer_0`, and `blue_defender_0`.
+- `task_family`: `swarm_combat`
+- `formalism`: `POSG`
+- Teams act simultaneously in a shared 3D gate-racing arena.
 
 ## Roles
 
-Red has one racer and one defender escort. The red racer is the task-progress agent and must pass a six-gate `wide_slalom` sequence. The red defender escorts the racer and is modeled in the scenario contract as a protective teammate.
+- `red_racer_0`: race through the `wide_slalom` gates and maximize red-team score.
+- `red_defender_0`: escort the red racer and preserve safe spacing.
+- `blue_racer_0`: contest the same gate sequence from the opposing side.
+- `blue_defender_0`: intercept the red racer while avoiding hard collisions.
 
-Blue has one racer and one defender intercept. The blue side opposes red progress. The blue defender is the primary interceptor in the M1 termination semantics.
+## Dynamics And Scoring
 
-## State, Observations, and Actions
+- Shared engine: `game_agent.envs.swarm_combat.SwarmCombatEnv`
+- Racer dynamics: `double_integrator`
+- Defender dynamics: `damped_double_integrator`
+- A valid gate pass contributes `1.0` to the passing team score.
+- Episodes terminate on hard collision / safety violation, out of bounds, or timeout at 600 steps.
 
-The frozen M1 interface uses a per-agent observation vector of shape `(32,)` and a per-agent action vector of shape `(4,)`. The observation includes own state, teammate relative state, two opponent relative states, next-gate direction/distance, role one-hot features, nearest-opponent state, gate index, and normalized step. The first two action entries are 2D velocity commands. The last two entries are reserved for compatibility with the current `drone_ring_game` policy interface.
+## Evaluation
 
-## Transition and Communication
-
-The local environment is deterministic under `reset(seed=...)`. Communication mode is `perfect`, so no delayed or dropped communication is applied and `communication_dropped` is always false.
-
-## Rewards and Metrics
-
-Reward components are training signals only. The primary evaluation metric is `success_rate`, which is intentionally separate from all reward component names. Hard constraints include `collision_rate`, `out_of_bounds_rate`, and `action_violation_rate`.
-
-## Termination
-
-The episode terminates when the red racer passes all gates, when interception/collision occurs, or when any agent leaves bounds. It truncates at `max_steps=600`.
-
-## M1 Compatibility Note
-
-The source plan states that the current 1v1 `drone_ring_game` reference environment cannot fully express this 2v2 wide slalom task. This package therefore freezes the 2v2 semantics in `task_spec.yaml` and `env_config.yaml`, while implementing a compact 2D environment with the plan-required four-agent roles and expanded fixed-length observations.
+- Primary metric: `team_score` = average cumulative red-team score across validation seeds.
+- Secondary metrics: `avg_red_score`, `avg_blue_score`, `avg_episode_length`, `red_win_rate`, `draw_rate`.
+- Hard constraints: `collision_rate <= 0.05`, `out_of_bounds_rate <= 0.01`, `action_violation_rate == 0.0`.

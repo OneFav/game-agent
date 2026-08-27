@@ -1,4 +1,5 @@
 ﻿import subprocess
+import json
 import sys
 from pathlib import Path
 
@@ -115,6 +116,20 @@ def test_policy_hook_accepts_policy_that_requires_env_spec(tmp_path: Path) -> No
     assert result.returncode == 0, result.stderr
 
 
+def test_policy_hook_rejects_missing_method_hypothesis(tmp_path: Path) -> None:
+    scenario = ScenarioCompiler(tmp_path).compile("红方穿过两个圆环，蓝方追击拦截", "drone_ring_001")
+    policy = PolicyDesigner(tmp_path).build(scenario, "rule_ring_nav_v1")
+    metadata_path = policy / "metadata.json"
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    del metadata["method_hypothesis"]
+    metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
+
+    _assert_hook_fails(
+        [*POLICY_HOOK, "--policy", str(policy)],
+        "metadata.method_hypothesis must be a mapping",
+    )
+
+
 def test_experiment_hook_rejects_empty_leaderboard(tmp_path: Path) -> None:
     scenario = ScenarioCompiler(tmp_path).compile("红方穿过两个圆环，蓝方追击拦截", "drone_ring_001")
     policy = PolicyDesigner(tmp_path).build(scenario, "rule_ring_nav_v1")
@@ -134,6 +149,36 @@ def test_experiment_hook_rejects_trial_missing_file(tmp_path: Path) -> None:
     _assert_hook_fails([*EXPERIMENT_HOOK, "--exp", str(exp)], "missing required file: metrics.json")
 
 
+def test_experiment_hook_requires_multistep_evidence_for_learning_trial(
+    tmp_path: Path,
+) -> None:
+    scenario = ScenarioCompiler(tmp_path).compile("红方穿过两个圆环，蓝方追击拦截", "drone_ring_001")
+    policy = PolicyDesigner(tmp_path).build(scenario, "rule_ring_nav_v1")
+    exp = AutoResearchRunner(tmp_path).run(scenario, policy, "exp_drone_ring_001")
+    first_trial = next((exp / "trials").iterdir())
+    log_path = first_trial / "log.json"
+    log = json.loads(log_path.read_text(encoding="utf-8"))
+    log["training_executed"] = True
+    log_path.write_text(json.dumps(log), encoding="utf-8")
+
+    _assert_hook_fails(
+        [*EXPERIMENT_HOOK, "--exp", str(exp)],
+        "missing learning evidence: training_log.json",
+    )
+
+
+def test_experiment_hook_rejects_missing_standard_figure(tmp_path: Path) -> None:
+    scenario = ScenarioCompiler(tmp_path).compile("红方穿过两个圆环，蓝方追击拦截", "drone_ring_001")
+    policy = PolicyDesigner(tmp_path).build(scenario, "rule_ring_nav_v1")
+    exp = AutoResearchRunner(tmp_path).run(scenario, policy, "exp_drone_ring_001")
+    (exp / "figures" / "training_process.png").unlink()
+
+    _assert_hook_fails(
+        [*EXPERIMENT_HOOK, "--exp", str(exp)],
+        "missing required file: training_process.png",
+    )
+
+
 def _write_minimal_policy_files(policy: Path, search_space: dict) -> None:
     for filename in ("train.py", "infer.py"):
         (policy / filename).write_text("", encoding="utf-8")
@@ -141,4 +186,17 @@ def _write_minimal_policy_files(policy: Path, search_space: dict) -> None:
     (policy / "search_space.yaml").write_text(yaml.safe_dump(search_space), encoding="utf-8")
     (policy / "algorithm_card.md").write_text("# Algorithm\n", encoding="utf-8")
     (policy / "requirements.txt").write_text("", encoding="utf-8")
+    (policy / "metadata.json").write_text(
+        '{"method":{"family":"test","name":"test","learning_paradigm":"none",'
+        '"execution_mode":"decentralized","trained_parties":[],"frozen_parties":["all"]},'
+        '"method_hypothesis":{"statement":"test hypothesis",'
+        '"optimization_guidance":["tune test parameter"]},'
+        '"immutable_boundaries":{"evaluation_source":"scenario.evaluation_metrics",'
+        '"method_invariants":["keep method"],'
+        '"forbidden_changes":["keep scenario"]},'
+        '"checkpoint_binding":{"method":"test",'
+        '"observation_contract":"scenario.observation_space",'
+        '"action_contract":"scenario.action_space","preprocessing":"none"}}\n',
+        encoding="utf-8",
+    )
     (policy / "manifest.json").write_text("{}\n", encoding="utf-8")

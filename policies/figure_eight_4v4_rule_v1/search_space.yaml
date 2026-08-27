@@ -1,0 +1,27 @@
+parameters:
+  desired_speed:
+    values: [5.4, 5.8, 6.2]
+  lane_spacing:
+    values: [1.4, 1.8]
+  turn_lookahead:
+    values: [6.0, 7.0]
+  risk_margin:
+    values: [0.9]
+  defender_mode:
+    values: [escort]
+priority_groups:
+  priority_1: [desired_speed, lane_spacing, turn_lookahead]
+  priority_2: [risk_margin, defender_mode]
+  do_not_tune:
+    - position_gain
+    - velocity_gain
+    - boundary_margin
+    - turn_steps
+    - risk_lookahead_steps
+    - brake_release_speed
+    - gate_approach_offset
+    - gate_exit_offset
+    - separation_gain
+budget:
+  max_trials: 12
+  seeds_per_trial: 3

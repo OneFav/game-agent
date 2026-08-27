@@ -1,0 +1,86 @@
+{
+  "checkpoint_binding": {
+    "action_contract": "scenario.action_space:continuous:2d",
+    "agent_count": 1,
+    "method": "dynamics_aware_pd_rule",
+    "observation_contract": "scenario.observation_space:vector",
+    "parameter_sharing": "shared_by_all_agents",
+    "preprocessing": "max_space_local_obs_v1",
+    "scenario_id": "S06"
+  },
+  "formalism": "decentralized_control",
+  "immutable_boundaries": {
+    "action_limits": "finite action with scenario shape, norm cap, and final bounds clipping",
+    "evaluation_source": "scenario.evaluation_metrics",
+    "forbidden_changes": [
+      "Do not modify frozen scenario or evaluator files.",
+      "Do not consume global simulator state or training-only privileged state.",
+      "Do not replace the explicit rule method with a learned method during this search stage."
+    ],
+    "information_limits": "scenario observation contract only; graph/image policies use declared proprioception",
+    "method_invariants": [
+      "Keep the dynamics_aware_pd_rule rule family.",
+      "Execute with local scenario observations and non-privileged info only.",
+      "Clip every final action to scenario.action_space."
+    ],
+    "scenario_id": "S06"
+  },
+  "implementation_dependency": {
+    "path": "src/game_agent/policy_designer/max_space_policy.py",
+    "sha256": "f62d83ff70055679695c88a626a8819ab13436e63e935e7725fc59728a94c34a"
+  },
+  "method": {
+    "algorithm_family": "dynamics_aware_pd",
+    "execution_information": [
+      "local proprioception",
+      "local target_delta",
+      "progress, normalized time, message age, and role code when declared"
+    ],
+    "execution_mode": "decentralized_local_observation",
+    "explicit_opponent_model": false,
+    "family": "rule_based",
+    "frozen_parties": [
+      "all_agents"
+    ],
+    "learning_paradigm": "none",
+    "multi_agent_paradigm": "single_agent",
+    "name": "dynamics_aware_pd_rule",
+    "parameter_sharing": "shared_by_all_agents",
+    "reward_design": {
+      "decomposition": [],
+      "intent": "No training reward is used by this frozen rule baseline."
+    },
+    "selection_rationale": "A bounded observation-only rule controller is the smallest executable reference for protocol and promotion testing; it is not claimed to be the final high-performance method.",
+    "trained_parties": [],
+    "training_privileged_state": false
+  },
+  "method_hypothesis": {
+    "optimization_guidance": [
+      "Tune gain and damping before action_cap.",
+      "For adversarial or communication tasks, tune role/communication parameters only after safety passes.",
+      "Use scenario evaluation metrics for promotion; never substitute training reward."
+    ],
+    "statement": "For S06, dynamics_aware_pd_rule should improve energy_adjusted_success over the explicit zero-action baseline without action, collision, or boundary violations.",
+    "suspected_bottlenecks": [
+      "single_integrator_dynamics",
+      "vector execution observations",
+      "gain/damping trade-off under scenario hard constraints"
+    ]
+  },
+  "optimization_target": {
+    "definition": "mean scenario.evaluation_metrics.energy_adjusted_success",
+    "mode": "initial",
+    "primary": "energy_adjusted_success",
+    "threshold": 0.0,
+    "utility_definition": {
+      "baseline_utility": "same-seed scenario metric energy_adjusted_success",
+      "candidate_utility": "scenario metric energy_adjusted_success"
+    }
+  },
+  "policy_id": "max_space_s06_rule_v1",
+  "policy_type": "rule_based_reference_baseline",
+  "scenario_ref": "catalog:max_space_50_v1:S06",
+  "schema_version": "1.2",
+  "task_family": "dynamics",
+  "task_id": "S06"
+}

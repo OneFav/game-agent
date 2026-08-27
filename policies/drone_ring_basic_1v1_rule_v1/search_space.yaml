@@ -1,0 +1,18 @@
+parameters:
+  speed_scale:
+    values:
+    - 0.8
+    - 1.0
+    - 1.2
+  intercept_gain:
+    values:
+    - 0.8
+    - 1.0
+    - 1.2
+  safety_margin:
+    values:
+    - 0.1
+    - 0.2
+budget:
+  max_trials: 18
+  seeds_per_trial: 3
